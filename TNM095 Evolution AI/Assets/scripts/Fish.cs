@@ -5,35 +5,47 @@ public class Fish : MonoBehaviour {
 
     //Attributes
     public float food { get; set; }
-    public DNA dna;
-    public string chromosome;
+	public string chromosome;
 
-    private int initialMinSpeed = 0;
-	private int initialMaxSpeed = 100;
-	private int initialMinTurnAngle = 0;
-	private int initialMaxTurnAngle = 360;
+    private float initialMinSpeed = 0.5f;
+	private float initialMaxSpeed = 1.5f;
+	private float initialMinTurnAngle = 5f;
+	private float initialMaxTurnAngle = 100f;
 	private int initialMinVisRange = 0;
 	private int initialMaxVisRange = 10;
 
-	//Constructor
-	public Fish() {
-        generateFish();
-    }
+	private float speed;// = 1;
+	private float turnAngle;// = 30;
+	private float visabilityRange;// = 10;
 
-	//Reproduction constructor
-	public Fish(string motherDna, string fatherDna) {
-		//TODO - generate dna string based on in parameters
+	private Vector2 forwardDirection;
+
+	// Use this for initialization
+	void Start () {
+
+		this.food = 0;
+
+		//Give the fish random values
+		speed = Random.Range(initialMinSpeed, initialMaxSpeed);
+		turnAngle = Random.Range(initialMinTurnAngle, initialMaxTurnAngle);
+		visabilityRange = Random.Range(initialMinVisRange, initialMaxVisRange);
+
+		chromosome = "" + speed + turnAngle + visabilityRange;
+
+		//initiate forward direction
+		forwardDirection = new Vector2(1, 1);
+		forwardDirection.Normalize ();
 	}
 
-	//Generate random inital traits
-	private void generateFish() {
+	// Update is called once per frame
+	void Update () {
 
-        this.food = 0;
+		//Update forward direction with a random angle within the units maximum turnAngle
+		float randomAngle = Random.Range(-turnAngle, turnAngle);
+		forwardDirection = Quaternion.Euler (0, 0, randomAngle) * forwardDirection;
+		forwardDirection.Normalize();
 
-        this.dna.speed = Random.Range(initialMinSpeed, initialMaxSpeed);
-        this.dna.turnAngle = Random.Range(initialMinTurnAngle, initialMaxTurnAngle);
-        this.dna.visabilityRange = Random.Range(initialMinVisRange, initialMaxVisRange);
-
-        this.chromosome = "" + this.dna.speed + this.dna.turnAngle + this.dna.visabilityRange;
-    }
+		//Move individual forward with constant speed
+		transform.Translate(forwardDirection * Time.deltaTime * speed);
+	}
 }
