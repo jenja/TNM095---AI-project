@@ -24,6 +24,11 @@ public class Fish : MonoBehaviour {
 		this.dna = new Dna();
 	}
 
+	//Reproduction constructor
+	public Fish(string motherDna, string fatherDna) {
+		//TODO - generate dna string based on in parameters
+	}
+
 	//Generate random inital traits
 	private void generateFish () {
 		this.speed = Random.Range (initialMinSpeed, initialMaxSpeed);
