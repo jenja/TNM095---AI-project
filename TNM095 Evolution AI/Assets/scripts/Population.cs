@@ -9,7 +9,9 @@ public class Population : MonoBehaviour {
 	//Constructor
 	public Population(int size) {
 		for (int i = 0; i < size; i++) {
-			fishList [i] = new Fish ();
+			fishList[i] = new Fish();
+            Debug.Log(fishList[i].dna.speed);
+            
 		}
 		this.size = size;
 	}
