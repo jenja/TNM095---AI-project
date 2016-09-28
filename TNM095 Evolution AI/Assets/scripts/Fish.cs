@@ -3,26 +3,22 @@ using System.Collections;
 
 public class Fish : MonoBehaviour {
 
-	public int initialMinSpeed;
-	public int initialMaxSpeed;
-	public int initialMinTurnAngle;
-	public int initialMaxTurnAngle;
-	public int initialMinVisRange;
-	public int initialMaxVisRange;
+    //Attributes
+    public float food { get; set; }
+    public DNA dna;
+    public string chromosome;
 
-	private int speed;
-	private int turnAngle;
-	private int visabilityRange;
-
-	private string dna;
-
-	private int fitness;
+    private int initialMinSpeed = 0;
+	private int initialMaxSpeed = 100;
+	private int initialMinTurnAngle = 0;
+	private int initialMaxTurnAngle = 360;
+	private int initialMinVisRange = 0;
+	private int initialMaxVisRange = 10;
 
 	//Constructor
 	public Fish() {
-		generateFish ();
-		this.dna = generateDna ();
-	}
+        generateFish();
+    }
 
 	//Reproduction constructor
 	public Fish(string motherDna, string fatherDna) {
@@ -30,43 +26,14 @@ public class Fish : MonoBehaviour {
 	}
 
 	//Generate random inital traits
-	private void generateFish () {
-		this.speed = Random.Range (initialMinSpeed, initialMaxSpeed);
-		this.speed = Random.Range (initialMinTurnAngle, initialMaxTurnAngle);
-		this.speed = Random.Range (initialMinVisRange, initialMaxVisRange);
-	}
+	private void generateFish() {
 
-	//Generate random dna
-	private string generateDna() {
-		//TODO use initial variables to generate dna
-		return "";
-	}
+        this.food = 0;
 
-	//Getters
+        this.dna.speed = Random.Range(initialMinSpeed, initialMaxSpeed);
+        this.dna.turnAngle = Random.Range(initialMinTurnAngle, initialMaxTurnAngle);
+        this.dna.visabilityRange = Random.Range(initialMinVisRange, initialMaxVisRange);
 
-	public int getSpeed() {
-		return this.speed;
-	}
-
-	public int getTurnAngle() {
-		return this.turnAngle;
-	}
-
-	public int getVisabilityRange() {
-		return this.visabilityRange;
-	}
-
-	public int getFitness() {
-		return this.fitness;
-	}
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		//TODO 	create movement, create counter for fitness
-	}
+        this.chromosome = "" + this.dna.speed + this.dna.turnAngle + this.dna.visabilityRange;
+    }
 }
