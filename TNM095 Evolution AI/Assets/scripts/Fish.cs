@@ -14,14 +14,14 @@ public class Fish : MonoBehaviour {
 	private int turnAngle;
 	private int visabilityRange;
 
-	private Dna dna;
+	private string dna;
 
 	private int fitness;
 
 	//Constructor
 	public Fish() {
 		generateFish ();
-		this.dna = new Dna();
+		this.dna = generateDna ();
 	}
 
 	//Reproduction constructor
@@ -34,6 +34,12 @@ public class Fish : MonoBehaviour {
 		this.speed = Random.Range (initialMinSpeed, initialMaxSpeed);
 		this.speed = Random.Range (initialMinTurnAngle, initialMaxTurnAngle);
 		this.speed = Random.Range (initialMinVisRange, initialMaxVisRange);
+	}
+
+	//Generate random dna
+	private string generateDna() {
+		//TODO use initial variables to generate dna
+		return "";
 	}
 
 	//Getters
