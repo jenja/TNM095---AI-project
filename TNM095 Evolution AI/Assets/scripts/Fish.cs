@@ -4,8 +4,8 @@ using System.Collections;
 public class Fish : MonoBehaviour {
 
     //Attributes
-    public float food { get; set; }
-	public string chromosome;
+	public int food;
+	public float[] chromosome;
 
     private float initialMinSpeed = 0.5f;
 	private float initialMaxSpeed = 1.5f;
@@ -20,17 +20,15 @@ public class Fish : MonoBehaviour {
 
 	private Vector2 forwardDirection;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
 
-		this.food = 0;
+        this.food = 0;
 
-		//Give the fish random values
-		speed = Random.Range(initialMinSpeed, initialMaxSpeed);
-		turnAngle = Random.Range(initialMinTurnAngle, initialMaxTurnAngle);
-		visabilityRange = Random.Range(initialMinVisRange, initialMaxVisRange);
-
-		chromosome = "" + speed + turnAngle + visabilityRange;
+        //Give the fish random values
+        speed = Random.Range(initialMinSpeed, initialMaxSpeed);
+        turnAngle = Random.Range(initialMinTurnAngle, initialMaxTurnAngle);
+        visabilityRange = Random.Range(initialMinVisRange, initialMaxVisRange);
 
 		//initiate forward direction
 		forwardDirection = new Vector2(1, 1);

@@ -56,24 +56,54 @@ public class Simulation : MonoBehaviour {
 	}
 
 	private void sortListByFitness () {
+        //Pause simulation during reproduction
+        Time.timeScale = 0;
+
+        //sort the list by the amount of food eaten
+        fishList.Sort(
+            delegate (GameObject x, GameObject y) {
+                return y.GetComponent<Fish>().food.CompareTo(x.GetComponent<Fish>().food);
+            }
+        );
+
+        //debug sorting
+        /* for (int i = 0; i < populationSize; i++) {
+			GameObject temp = fishList [i];
+			Fish tempScript = temp.GetComponent<Fish> ();
+			Debug.Log (temp + ", ate " + tempScript.food + "food");
+		} */
 
     }
 
     private void createNewFish() { 
-        List<string> chromosomeList = new List<string>();
+        List<float[]> chromosomeList = new List<float[]>();
         for (int i = 0; i < populationSize; i += 2) {
     
             GameObject tempDad = fishList[i];
             GameObject tempMom = fishList[i + 1];
-            string fishDad = tempDad.GetComponent<Fish>().chromosome;
-            string fishMom = tempMom.GetComponent<Fish>().chromosome;
+            float[] fishDad = tempDad.GetComponent<Fish>().chromosome;
+            float[] fishMom = tempMom.GetComponent<Fish>().chromosome;
+            float[] fishSon = fishDad;
+            float[] fishGal = fishMom;
 
             int temp = Random.Range(0, fishDad.Length);
+            
+            for (int k = 0; k < fishDad.Length; k++) {
 
-            Debug.Log("temp " + temp);
+                if(k > temp){
+                    fishSon[k] = fishMom[k];
+                    fishGal[k] = fishDad[k];
+                }
+                
+            }
 
-            chromosomeList.Add(fishDad.Substring(0, temp) + fishMom.Substring(temp, fishMom.Length));
-            chromosomeList.Add(fishMom.Substring(0, temp) + fishDad.Substring(temp, fishDad.Length));
+            Debug.Log("fishDad: " + fishDad);
+            Debug.Log("fishMom: " + fishMom);
+            Debug.Log("fishSon: " + fishSon);
+            Debug.Log("fishGal: " + fishGal);
+
+            chromosomeList.Add(fishSon);
+            chromosomeList.Add(fishGal);
 
             Debug.Log("List " + chromosomeList[0]);
         }
