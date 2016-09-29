@@ -51,7 +51,12 @@ public class Fish : MonoBehaviour {
 
     //Check collision 
     void OnTriggerEnter2D(Collider2D coll){
-        Destroy(coll.gameObject);
+        if(coll.gameObject.tag == "food") {
+            Destroy(coll.gameObject);
+        }
+        
         this.food = this.food + 1;
+
+        Debug.Log(this.food);
     }
 }
