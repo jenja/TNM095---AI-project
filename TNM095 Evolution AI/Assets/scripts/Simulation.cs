@@ -16,11 +16,28 @@ public class Simulation : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//Instantiate fishes and store them in a list
+		//Instantiate fishes and store them in a list (first generation)
 		fishList = new List<GameObject> ();
 		for (int i = 0; i < populationSize; i++) {
             
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
+		}
+
+		//Randomize first generations chromosomes
+		List<float[]> randomDnaList = new List<float[]>();
+		for (int i = 0; i < populationSize; i++) {
+
+			//TODO Replace numbers with variables
+			float newSpeed = Random.Range(1, 5);
+			float newTurnAngle = Random.Range(1, 180);
+			float newVisRange = Random.Range(1, 5);
+			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange});
+		}
+
+		//Assign the random chromosomes to the fish
+		for (int i = 0; i < populationSize; i++) {
+			GameObject tempFish = fishList [i];
+			tempFish.GetComponent<Fish> ().chromosome = randomDnaList [i];
 		}
 
         //Spawn food in a set interval
@@ -86,7 +103,9 @@ public class Simulation : MonoBehaviour {
             float[] fishSon = fishDad;
             float[] fishGal = fishMom;
 
-            int temp = Random.Range(0, fishDad.Length);
+            int temp = Random.Range(0, fishDad.Length - 1);
+
+            Debug.Log("temp " + temp);
             
             for (int k = 0; k < fishDad.Length; k++) {
 
@@ -97,10 +116,10 @@ public class Simulation : MonoBehaviour {
                 
             }
 
-            Debug.Log("fishDad: " + fishDad);
-            Debug.Log("fishMom: " + fishMom);
-            Debug.Log("fishSon: " + fishSon);
-            Debug.Log("fishGal: " + fishGal);
+            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
+            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
+            Debug.Log("fishSon: " + fishSon[0] + "," + fishSon[1] + "," + fishSon[2]);
+            Debug.Log("fishGal: " + fishGal[0] + "," + fishGal[1] + "," + fishGal[2]);
 
             chromosomeList.Add(fishSon);
             chromosomeList.Add(fishGal);
