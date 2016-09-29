@@ -94,10 +94,11 @@ public class Simulation : MonoBehaviour {
 
 	private List<float[]> GenerateChromosomes() { 
         List<float[]> chromosomeList = new List<float[]>();
-        for (int i = 0; i < populationSize; i ++) {
+        for (int i = 0; i < populationSize; i++) {
             
             GameObject tempDad = fishList[i];
             GameObject tempMom = fishList[i + 1];
+
             float[] fishDad = tempDad.GetComponent<Fish>().chromosome;
             float[] fishMom = tempMom.GetComponent<Fish>().chromosome;
             float[] fishKid = fishDad;
