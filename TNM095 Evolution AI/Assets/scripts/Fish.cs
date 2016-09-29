@@ -4,7 +4,7 @@ using System.Collections;
 public class Fish : MonoBehaviour {
 
     //Attributes
-    public float food { get; set; }
+	public int food;
 	public string chromosome;
 
     private float initialMinSpeed = 0.5f;

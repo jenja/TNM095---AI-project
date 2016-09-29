@@ -54,7 +54,25 @@ public class Simulation : MonoBehaviour {
 		spawnNewFish ();
 	}
 
-	private void sortListByFitness () {}
+	private void sortListByFitness () {
+
+		//Pause simulation during reproduction
+		Time.timeScale = 0;
+
+		//sort the list by the amount of food eaten
+		fishList.Sort (
+			delegate(GameObject x, GameObject y) {
+				return y.GetComponent<Fish>().food.CompareTo(x.GetComponent<Fish>().food);
+			}
+		);
+
+		//debug sorting
+		/* for (int i = 0; i < populationSize; i++) {
+			GameObject temp = fishList [i];
+			Fish tempScript = temp.GetComponent<Fish> ();
+			Debug.Log (temp + ", ate " + tempScript.food + "food");
+		} */
+	}
 	private void createNewFish () {}
 	private void spawnNewFish () {
 	}
