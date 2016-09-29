@@ -6,6 +6,8 @@ public class Simulation : MonoBehaviour {
 
 	public int populationSize;
     public int foodAmount;
+	public int mutatonChanse;
+	public float mutationMagnitude;
 	public float generationTime;
 	public GameObject fish;
     public GameObject food;
@@ -102,8 +104,8 @@ public class Simulation : MonoBehaviour {
             float[] fishMom = calcParent();
             float[] fishKid = fishDad;
 
-            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
-            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
+//            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
+//            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
 
             int temp = Random.Range(0, fishDad.Length - 1);
 
@@ -114,19 +116,14 @@ public class Simulation : MonoBehaviour {
                 }
             }
 
-//            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
-//            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
-//            Debug.Log("fishSon: " + fishSon[0] + "," + fishSon[1] + "," + fishSon[2]);
-//            Debug.Log("fishGal: " + fishGal[0] + "," + fishGal[1] + "," + fishGal[2]);
-
             chromosomeList.Add(fishKid);
         }
 
         ClearScene();
-
 		return chromosomeList;
     }
 
+	//Clear scene of gameobjects and clear lists
     private void ClearScene () {
 
         //Destory all GameObjects with the tag food
@@ -141,7 +138,6 @@ public class Simulation : MonoBehaviour {
 
         //Clear fishList
         fishList.Clear();
-
     }
 
 	//Apply the new chromosomes and spawn the new generation
@@ -150,11 +146,16 @@ public class Simulation : MonoBehaviour {
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
 			fishList [i].GetComponent<Fish> ().chromosome = chromosomeList [i];
 		}
+
+		//Mutate
+		Mutate();
+
 		Time.timeScale = 4; //resume simmulation
 
         SpawnFood();
     }
 
+	//Get a random parent based on fitness
     private float[] calcParent(){
 
         float randomSeed = Random.Range(0, GetTotalFitness());
@@ -172,7 +173,27 @@ public class Simulation : MonoBehaviour {
         }
 
         Debug.Log("Error incest");
-
         return null;
     }
+
+	private void Mutate() {
+
+		for (int i = 0; i < populationSize; i++) {
+
+			float[] currentChromosome = fishList [i].GetComponent<Fish> ().chromosome;
+			for (int k = 0; k < currentChromosome.Length; k++) {
+
+				if (Random.Range (0, 100) <= mutatonChanse) {
+					
+					float mutateAmount = mutationMagnitude * currentChromosome [k];
+					currentChromosome[k] += Random.Range (-mutateAmount, mutateAmount);
+
+					Debug.Log ("Fish Mutated: k = " + k + ", new value = " + currentChromosome [k]);
+				}
+				else
+					continue;
+			}
+		}
+	}
+
 }
