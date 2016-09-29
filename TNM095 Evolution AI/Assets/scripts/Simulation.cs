@@ -41,7 +41,8 @@ public class Simulation : MonoBehaviour {
 		}
 
         //Spawn food in a set interval
-        InvokeRepeating("SpawnFood", 0.0f, 5.0f);
+        //InvokeRepeating("SpawnFood", 0.0f, 5.0f);
+        SpawnFood();
 
 		timer = 0;
 	}
@@ -93,14 +94,13 @@ public class Simulation : MonoBehaviour {
 
 	private List<float[]> GenerateChromosomes() { 
         List<float[]> chromosomeList = new List<float[]>();
-        for (int i = 0; i < populationSize; i += 2) {
+        for (int i = 0; i < populationSize; i ++) {
             
             GameObject tempDad = fishList[i];
             GameObject tempMom = fishList[i + 1];
             float[] fishDad = tempDad.GetComponent<Fish>().chromosome;
             float[] fishMom = tempMom.GetComponent<Fish>().chromosome;
-            float[] fishSon = fishDad;
-            float[] fishGal = fishMom;
+            float[] fishKid = fishDad;
 
             int temp = Random.Range(0, fishDad.Length - 1);
 
@@ -109,8 +109,7 @@ public class Simulation : MonoBehaviour {
             for (int k = 0; k < fishDad.Length; k++) {
 
                 if(k > temp){
-                    fishSon[k] = fishMom[k];
-                    fishGal[k] = fishDad[k];
+                    fishKid[k] = fishMom[k];
                 }
             }
 
@@ -119,8 +118,7 @@ public class Simulation : MonoBehaviour {
 //            Debug.Log("fishSon: " + fishSon[0] + "," + fishSon[1] + "," + fishSon[2]);
 //            Debug.Log("fishGal: " + fishGal[0] + "," + fishGal[1] + "," + fishGal[2]);
 
-            chromosomeList.Add(fishSon);
-            chromosomeList.Add(fishGal);
+            chromosomeList.Add(fishKid);
         }
 
         ClearScene();
@@ -151,6 +149,8 @@ public class Simulation : MonoBehaviour {
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
 			fishList [i].GetComponent<Fish> ().chromosome = chromosomeList [i];
 		}
-		Time.timeScale = 1; //resume simmulation
+		Time.timeScale = 4; //resume simmulation
+
+        SpawnFood();
     }
 }
