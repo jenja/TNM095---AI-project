@@ -64,4 +64,15 @@ public class Fish : MonoBehaviour {
 		else if (newX != 0 && newY == 0)	transform.position = new Vector2 (newX, transform.position.y);
 		else if (newX == 0 && newY != 0)	transform.position = new Vector2 (transform.position.x, newY);
 	}
+
+    //Check collision 
+    void OnTriggerEnter2D(Collider2D coll){
+        if(coll.gameObject.tag == "food") {
+            Destroy(coll.gameObject);
+        }
+        
+        this.food = this.food + 1;
+
+        Debug.Log(this.food);
+    }
 }
