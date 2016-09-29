@@ -48,4 +48,10 @@ public class Fish : MonoBehaviour {
 		//Move individual forward with constant speed
 		transform.Translate(forwardDirection * Time.deltaTime * speed);
 	}
+
+    //Check collision 
+    void OnTriggerEnter2D(Collider2D coll){
+        Destroy(coll.gameObject);
+        this.food = this.food + 1;
+    }
 }

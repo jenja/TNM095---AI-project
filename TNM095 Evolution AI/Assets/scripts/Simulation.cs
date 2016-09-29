@@ -14,7 +14,7 @@ public class Simulation : MonoBehaviour {
 			Instantiate (fish);
 		}
         //Spawn food in a set interval
-        InvokeRepeating("SpawnFood", 2.0f, 3.0f);
+        InvokeRepeating("SpawnFood", 0.0f, 5.0f);
 	}
 
     //Spawn a certain amount of food
@@ -30,4 +30,5 @@ public class Simulation : MonoBehaviour {
 	void Update () {
 	    
 	}
+
 }
