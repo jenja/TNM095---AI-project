@@ -9,7 +9,7 @@ public class Simulation : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		for (int i = 0; i < populationSize; i++) {
-			Instantiate (fish);
+			Instantiate (fish, transform.position, Quaternion.identity);
 		}
 	}
 	
