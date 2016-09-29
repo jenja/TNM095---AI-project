@@ -18,7 +18,7 @@ public class Simulation : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        Time.timeScale = 4;
+//        Time.timeScale = 1;
 
         //Instantiate fishes and store them in a list (first generation)
         fishList = new List<GameObject> ();
@@ -78,7 +78,7 @@ public class Simulation : MonoBehaviour {
 
 	private void SortFishByFitness () {
         //Pause simulation during reproduction
-        Time.timeScale = 0;
+//        Time.timeScale = 0;
 
         //sort the list by the amount of food eaten
         fishList.Sort(
@@ -150,7 +150,7 @@ public class Simulation : MonoBehaviour {
 		//Mutate
 		Mutate();
 
-		Time.timeScale = 4; //resume simmulation
+//		Time.timeScale = 1; //resume simmulation
 
         SpawnFood();
     }
