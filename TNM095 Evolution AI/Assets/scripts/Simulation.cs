@@ -16,8 +16,10 @@ public class Simulation : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//Instantiate fishes and store them in a list (first generation)
-		fishList = new List<GameObject> ();
+        Time.timeScale = 4;
+
+        //Instantiate fishes and store them in a list (first generation)
+        fishList = new List<GameObject> ();
 		for (int i = 0; i < populationSize; i++) {
             
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
@@ -82,31 +84,29 @@ public class Simulation : MonoBehaviour {
                 return y.GetComponent<Fish>().food.CompareTo(x.GetComponent<Fish>().food);
             }
         );
-
-        //debug sorting
-        /* for (int i = 0; i < populationSize; i++) {
-			GameObject temp = fishList [i];
-			Fish tempScript = temp.GetComponent<Fish> ();
-			Debug.Log (temp + ", ate " + tempScript.food + "food");
-		} */
-
     }
+
+	//Get the poopulations total fitness
+	private int GetTotalFitness() {
+		int totalFitness = 0;
+		for (int i = 0; i < populationSize; i++)
+			totalFitness += fishList [i].GetComponent<Fish> ().food;
+		return totalFitness;
+	}
 
 	private List<float[]> GenerateChromosomes() { 
         List<float[]> chromosomeList = new List<float[]>();
         for (int i = 0; i < populationSize; i++) {
-            
-            GameObject tempDad = fishList[i];
-            GameObject tempMom = fishList[i + 1];
 
-            float[] fishDad = tempDad.GetComponent<Fish>().chromosome;
-            float[] fishMom = tempMom.GetComponent<Fish>().chromosome;
+            float[] fishDad = calcParent();
+            float[] fishMom = calcParent();
             float[] fishKid = fishDad;
+
+            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
+            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
 
             int temp = Random.Range(0, fishDad.Length - 1);
 
-//            Debug.Log("temp " + temp);
-            
             for (int k = 0; k < fishDad.Length; k++) {
 
                 if(k > temp){
@@ -153,5 +153,26 @@ public class Simulation : MonoBehaviour {
 		Time.timeScale = 4; //resume simmulation
 
         SpawnFood();
+    }
+
+    private float[] calcParent(){
+
+        float randomSeed = Random.Range(0, GetTotalFitness());
+        float counter = 0;
+
+        for(int i = 0; i < populationSize; i++) {
+            counter += fishList[i].GetComponent<Fish>().food;
+            
+            if(randomSeed > counter) {
+                continue;
+            }
+            else {
+                return fishList[i].GetComponent<Fish>().chromosome;
+            }
+        }
+
+        Debug.Log("Error incest");
+
+        return null;
     }
 }
