@@ -16,10 +16,27 @@ public class Simulation : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//Instantiate fishes and store them in a list
+		//Instantiate fishes and store them in a list (first generation)
 		fishList = new List<GameObject> ();
 		for (int i = 0; i < populationSize; i++) {
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
+		}
+
+		//Randomize first generations chromosomes
+		List<float[]> randomDnaList = new List<float[]>();
+		for (int i = 0; i < populationSize; i++) {
+
+			//TODO Replace numbers with variables
+			float newSpeed = Random.Range(1, 5);
+			float newTurnAngle = Random.Range(1, 180);
+			float newVisRange = Random.Range(1, 5);
+			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange});
+		}
+
+		//Assign the random chromosomes to the fish
+		for (int i = 0; i < populationSize; i++) {
+			GameObject tempFish = fishList [i];
+			tempFish.GetComponent<Fish> ().chromosome = randomDnaList [i];
 		}
 
         //Spawn food in a set interval

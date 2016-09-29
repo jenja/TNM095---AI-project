@@ -5,18 +5,11 @@ public class Fish : MonoBehaviour {
 
     //Attributes
 	public int food;
-	public string chromosome;
+	public float[] chromosome;
 
-    private float initialMinSpeed = 0.5f;
-	private float initialMaxSpeed = 1.5f;
-	private float initialMinTurnAngle = 5f;
-	private float initialMaxTurnAngle = 100f;
-	private int initialMinVisRange = 0;
-	private int initialMaxVisRange = 10;
-
-	private float speed;// = 1;
-	private float turnAngle;// = 30;
-	private float visabilityRange;// = 10;
+	private float speed;
+	private float turnAngle;
+	private float visabilityRange;
 
 	private Vector2 forwardDirection;
 
@@ -25,12 +18,12 @@ public class Fish : MonoBehaviour {
 
 		this.food = 0;
 
-		//Give the fish random values
-		speed = Random.Range(initialMinSpeed, initialMaxSpeed);
-		turnAngle = Random.Range(initialMinTurnAngle, initialMaxTurnAngle);
-		visabilityRange = Random.Range(initialMinVisRange, initialMaxVisRange);
+		//TODO move the random functionality to simulatio scripts
 
-		chromosome = "" + speed + turnAngle + visabilityRange;
+		//Give the fish random values
+		speed = chromosome[0];
+		turnAngle = chromosome[1];
+		visabilityRange = chromosome[2];
 
 		//initiate forward direction
 		forwardDirection = new Vector2(1, 1);
@@ -70,9 +63,6 @@ public class Fish : MonoBehaviour {
         if(coll.gameObject.tag == "food") {
             this.food = this.food + 1;
             Destroy(coll.gameObject);
-
-            Debug.Log(this.food);
         }
-
     }
 }
