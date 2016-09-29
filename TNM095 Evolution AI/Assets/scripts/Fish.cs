@@ -70,9 +70,6 @@ public class Fish : MonoBehaviour {
         if(coll.gameObject.tag == "food") {
             Destroy(coll.gameObject);
         }
-        
         this.food = this.food + 1;
-
-        Debug.Log(this.food);
     }
 }
