@@ -19,6 +19,7 @@ public class Simulation : MonoBehaviour {
 		//Instantiate fishes and store them in a list
 		fishList = new List<GameObject> ();
 		for (int i = 0; i < populationSize; i++) {
+            
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
 		}
 
@@ -54,8 +55,31 @@ public class Simulation : MonoBehaviour {
 		spawnNewFish ();
 	}
 
-	private void sortListByFitness () {}
-	private void createNewFish () {}
+	private void sortListByFitness () {
+
+    }
+
+    private void createNewFish() { 
+        List<string> chromosomeList = new List<string>();
+        for (int i = 0; i < populationSize; i += 2) {
+    
+            GameObject tempDad = fishList[i];
+            GameObject tempMom = fishList[i + 1];
+            string fishDad = tempDad.GetComponent<Fish>().chromosome;
+            string fishMom = tempMom.GetComponent<Fish>().chromosome;
+
+            int temp = Random.Range(0, fishDad.Length);
+
+            Debug.Log("temp " + temp);
+
+            chromosomeList.Add(fishDad.Substring(0, temp) + fishMom.Substring(temp, fishMom.Length));
+            chromosomeList.Add(fishMom.Substring(0, temp) + fishDad.Substring(temp, fishDad.Length));
+
+            Debug.Log("List " + chromosomeList[0]);
+        }
+    }
+
 	private void spawnNewFish () {
-	}
+
+    }
 }
