@@ -69,6 +69,7 @@ public class Simulation : MonoBehaviour {
 
 		sortListByFitness ();
 		createNewFish ();
+        clearScene ();
 		spawnNewFish ();
 	}
 
@@ -92,7 +93,7 @@ public class Simulation : MonoBehaviour {
 
     }
 
-    private void createNewFish() { 
+    private void createNewFish () { 
         List<float[]> chromosomeList = new List<float[]>();
         for (int i = 0; i < populationSize; i += 2) {
     
@@ -126,6 +127,22 @@ public class Simulation : MonoBehaviour {
 
             Debug.Log("List " + chromosomeList[0]);
         }
+    }
+
+    private void clearScene () {
+
+        //Destory all GameObjects with the tag food
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("food");
+        foreach (GameObject go in gos)
+            Destroy(go);
+        
+        //Destroy all fish
+        fishList.ForEach(delegate(GameObject fish){
+            Destroy(fish);
+        });
+
+        //Clear fishList
+        fishList.Clear();
     }
 
 	private void spawnNewFish () {
