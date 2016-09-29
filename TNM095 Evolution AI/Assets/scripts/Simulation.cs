@@ -6,10 +6,12 @@ public class Simulation : MonoBehaviour {
 
 	public int populationSize;
     public int foodAmount;
+	public float generationTime;
 	public GameObject fish;
     public GameObject food;
 
 	private List<GameObject> fishList;
+	private float timer;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,8 @@ public class Simulation : MonoBehaviour {
 
         //Spawn food in a set interval
         InvokeRepeating("SpawnFood", 0.0f, 5.0f);
+
+		timer = 0;
 	}
 
     //Spawn a certain amount of food
@@ -36,6 +40,22 @@ public class Simulation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    
+		timer += Time.deltaTime;
+		if (timer > generationTime) {
+			timer = 0;
+			ReproduceGeneration ();
+		}
+	}
+
+	private void ReproduceGeneration () {
+
+		sortListByFitness ();
+		createNewFish ();
+		spawnNewFish ();
+	}
+
+	private void sortListByFitness () {}
+	private void createNewFish () {}
+	private void spawnNewFish () {
 	}
 }
