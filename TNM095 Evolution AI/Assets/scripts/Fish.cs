@@ -47,6 +47,22 @@ public class Fish : MonoBehaviour {
 
 		//Move individual forward with constant speed
 		transform.Translate(forwardDirection * Time.deltaTime * speed);
+
+		//teleport fish to other side when outstepping boundries
+		GameObject world = GameObject.Find("World");
+		World worldScript = world.GetComponent<World> ();
+
+		float newX = 0;
+		float newY = 0;
+
+		if(transform.position.x > worldScript.xBoundry || transform.position.x < -worldScript.xBoundry)
+			newX = -transform.position.x;
+		if(transform.position.y > worldScript.yBoundry || transform.position.y < -worldScript.yBoundry)
+			newY = -transform.position.y;
+
+		if 		(newX != 0 && newY != 0)	transform.position = new Vector2 (newX, newY);
+		else if (newX != 0 && newY == 0)	transform.position = new Vector2 (newX, transform.position.y);
+		else if (newX == 0 && newY != 0)	transform.position = new Vector2 (transform.position.x, newY);
 	}
 
     //Check collision 
