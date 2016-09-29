@@ -81,15 +81,15 @@ public class Simulation : MonoBehaviour {
                 return y.GetComponent<Fish>().food.CompareTo(x.GetComponent<Fish>().food);
             }
         );
-
-        //debug sorting
-        /* for (int i = 0; i < populationSize; i++) {
-			GameObject temp = fishList [i];
-			Fish tempScript = temp.GetComponent<Fish> ();
-			Debug.Log (temp + ", ate " + tempScript.food + "food");
-		} */
-
     }
+
+	//Get the poopulations total fitness
+	private int GetTotalFitness() {
+		int totalFitness = 0;
+		for (int i = 0; i < populationSize; i++)
+			totalFitness += fishList [i].GetComponent<Fish> ().food;
+		return totalFitness;
+	}
 
 	private List<float[]> GenerateChromosomes() { 
         List<float[]> chromosomeList = new List<float[]>();
@@ -104,8 +104,6 @@ public class Simulation : MonoBehaviour {
 
             int temp = Random.Range(0, fishDad.Length - 1);
 
-//            Debug.Log("temp " + temp);
-            
             for (int k = 0; k < fishDad.Length; k++) {
 
                 if(k > temp){
