@@ -67,13 +67,11 @@ public class Simulation : MonoBehaviour {
 
 	private void ReproduceGeneration () {
 
-		sortListByFitness ();
-		createNewFish ();
-        clearScene ();
-		spawnNewFish ();
+		SortFishByFitness ();
+        SpawnNextGen (GenerateChromosomes ());
 	}
 
-	private void sortListByFitness () {
+	private void SortFishByFitness () {
         //Pause simulation during reproduction
         Time.timeScale = 0;
 
@@ -93,10 +91,10 @@ public class Simulation : MonoBehaviour {
 
     }
 
-    private void createNewFish () { 
+	private List<float[]> GenerateChromosomes() { 
         List<float[]> chromosomeList = new List<float[]>();
         for (int i = 0; i < populationSize; i += 2) {
-    
+            
             GameObject tempDad = fishList[i];
             GameObject tempMom = fishList[i + 1];
             float[] fishDad = tempDad.GetComponent<Fish>().chromosome;
@@ -106,7 +104,7 @@ public class Simulation : MonoBehaviour {
 
             int temp = Random.Range(0, fishDad.Length - 1);
 
-            Debug.Log("temp " + temp);
+//            Debug.Log("temp " + temp);
             
             for (int k = 0; k < fishDad.Length; k++) {
 
@@ -114,22 +112,23 @@ public class Simulation : MonoBehaviour {
                     fishSon[k] = fishMom[k];
                     fishGal[k] = fishDad[k];
                 }
-                
             }
 
-            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
-            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
-            Debug.Log("fishSon: " + fishSon[0] + "," + fishSon[1] + "," + fishSon[2]);
-            Debug.Log("fishGal: " + fishGal[0] + "," + fishGal[1] + "," + fishGal[2]);
+//            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
+//            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
+//            Debug.Log("fishSon: " + fishSon[0] + "," + fishSon[1] + "," + fishSon[2]);
+//            Debug.Log("fishGal: " + fishGal[0] + "," + fishGal[1] + "," + fishGal[2]);
 
             chromosomeList.Add(fishSon);
             chromosomeList.Add(fishGal);
-
-            Debug.Log("List " + chromosomeList[0]);
         }
+
+        ClearScene();
+
+		return chromosomeList;
     }
 
-    private void clearScene () {
+    private void ClearScene () {
 
         //Destory all GameObjects with the tag food
         GameObject[] gos = GameObject.FindGameObjectsWithTag("food");
@@ -143,9 +142,15 @@ public class Simulation : MonoBehaviour {
 
         //Clear fishList
         fishList.Clear();
+
     }
 
-	private void spawnNewFish () {
-
+	//Apply the new chromosomes and spawn the new generation
+	private void SpawnNextGen (List<float[]> chromosomeList) {
+		for (int i = 0; i < populationSize; i++) {
+			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
+			fishList [i].GetComponent<Fish> ().chromosome = chromosomeList [i];
+		}
+		Time.timeScale = 1; //resume simmulation
     }
 }
