@@ -68,7 +68,7 @@ public class Simulation : MonoBehaviour {
 	private void ReproduceGeneration () {
 
 		SortFishByFitness ();
-		SpawnNextGen (GenerateChromosomes ());
+        SpawnNextGen (GenerateChromosomes ());
 	}
 
 	private void SortFishByFitness () {
@@ -94,7 +94,7 @@ public class Simulation : MonoBehaviour {
 	private List<float[]> GenerateChromosomes() { 
         List<float[]> chromosomeList = new List<float[]>();
         for (int i = 0; i < populationSize; i += 2) {
-    
+            
             GameObject tempDad = fishList[i];
             GameObject tempMom = fishList[i + 1];
             float[] fishDad = tempDad.GetComponent<Fish>().chromosome;
@@ -120,7 +120,27 @@ public class Simulation : MonoBehaviour {
             chromosomeList.Add(fishSon);
             chromosomeList.Add(fishGal);
         }
+
+        ClearScene();
+
 		return chromosomeList;
+    }
+
+    private void ClearScene () {
+
+        //Destory all GameObjects with the tag food
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("food");
+        foreach (GameObject go in gos)
+            Destroy(go);
+        
+        //Destroy all fish
+        fishList.ForEach(delegate(GameObject fish){
+            Destroy(fish);
+        });
+
+        //Clear fishList
+        fishList.Clear();
+
     }
 
 	//Apply the new chromosomes and spawn the new generation
