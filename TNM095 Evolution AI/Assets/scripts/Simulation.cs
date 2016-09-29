@@ -28,7 +28,8 @@ public class Simulation : MonoBehaviour {
     void SpawnFood() {
 		for (int i = 0; i < foodAmount; i++){
             //Randomize position
-            Vector3 position = new Vector3(Random.Range(-8.0f, 8.0f), Random.Range(-5.0f, 5.0f), 0);
+			World worldScript = GameObject.Find("World").GetComponent<World>();
+			Vector3 position = new Vector3(Random.Range(-worldScript.xBoundry, worldScript.xBoundry), Random.Range(-worldScript.yBoundry, worldScript.yBoundry), 0);
             Instantiate(food, position, Quaternion.identity);
         }
     }
