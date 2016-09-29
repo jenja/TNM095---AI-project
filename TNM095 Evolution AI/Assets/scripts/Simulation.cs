@@ -91,7 +91,7 @@ public class Simulation : MonoBehaviour {
 
     }
 
-	private float[] GenerateChromosomes() { 
+	private List<float[]> GenerateChromosomes() { 
         List<float[]> chromosomeList = new List<float[]>();
         for (int i = 0; i < populationSize; i += 2) {
     
@@ -121,13 +121,12 @@ public class Simulation : MonoBehaviour {
 
             chromosomeList.Add(fishSon);
             chromosomeList.Add(fishGal);
-
-			return chromosomeList;
         }
+		return chromosomeList;
     }
 
 	//Apply the new chromosomes and spawn the new generation
-	private void SpawnNextGen (float[] chromosomeList) {
+	private void SpawnNextGen (List<float[]> chromosomeList) {
 		for (int i = 0; i < populationSize; i++) {
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
 			fishList [i].GetComponent<Fish> ().chromosome = chromosomeList [i];
