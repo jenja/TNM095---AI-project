@@ -13,6 +13,8 @@ public class Fish : MonoBehaviour {
 
 	private Vector2 forwardDirection;
 
+	private const float SPEED_REDUCTION = 0.25f;
+
     // Use this for initialization
     void Start() {
 
@@ -38,7 +40,7 @@ public class Fish : MonoBehaviour {
 		forwardDirection.Normalize();
 
 		//Move individual forward with constant speed
-		transform.Translate(forwardDirection * Time.deltaTime * speed);
+		transform.Translate(forwardDirection * Time.deltaTime * speed * SPEED_REDUCTION);
 
 		//teleport fish to other side when outstepping boundries
 		GameObject world = GameObject.Find("World");
