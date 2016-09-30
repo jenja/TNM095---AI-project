@@ -38,7 +38,7 @@ public class Simulation : MonoBehaviour {
 			//TODO Replace numbers with variables
 			float newSpeed = Random.Range(0.01f, 5.0f);
 			float newTurnAngle = Random.Range(0.01f, 180.0f);
-			float newVisRange = Random.Range(0.01f, 100.0f);
+			float newVisRange = Random.Range(0.1f, 10.0f);
             float newSize = Random.Range(1f, 3.0f);
 
 
@@ -107,6 +107,7 @@ public class Simulation : MonoBehaviour {
                 return y.GetComponent<Fish>().food.CompareTo(x.GetComponent<Fish>().food);
             }
         );
+        Debug.Log("GENERATION: " + generation);
 		Debug.Log ("Alpha: [" + fishList [0].GetComponent<Fish> ().chromosome [0] +
 		", " + fishList [0].GetComponent<Fish> ().chromosome [1] +
 		", " + fishList [0].GetComponent<Fish> ().chromosome [2] +
@@ -211,7 +212,8 @@ public class Simulation : MonoBehaviour {
 					
 					float mutateAmount = mutationMagnitude * currentChromosome [k];
 					currentChromosome[k] += Random.Range (-mutateAmount, mutateAmount);
-				}
+                    fishList[i].GetComponent<Fish>().mutant = true;
+                }
 				else
 					continue;
 			}
