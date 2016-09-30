@@ -5,11 +5,13 @@ public class Fish : MonoBehaviour {
 
     //Attributes
 	public int food;
+    public Color color;
 	public float[] chromosome;
 
 	private float speed;
 	private float turnAngle;
 	private float visabilityRange;
+    private float size;
 
 	private Vector2 forwardDirection;
 
@@ -25,10 +27,14 @@ public class Fish : MonoBehaviour {
 		speed = chromosome[0];
 		turnAngle = chromosome[1];
 		visabilityRange = chromosome[2];
+        size = chromosome[3];
 
 		//initiate forward direction
 		forwardDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
 		forwardDirection.Normalize ();
+
+        this.GetComponent<SpriteRenderer>().color = color;
+        this.GetComponent<Fish>().transform.localScale += new Vector3(size,size,1);
 	}
 
 	// Update is called once per frame
