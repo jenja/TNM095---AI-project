@@ -19,9 +19,7 @@ public class Simulation : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
-        Time.timeScale = 4;
-
+		
         //Instantiate fishes and store them in a list (first generation)
         fishList = new List<GameObject> ();
 		for (int i = 0; i < populationSize; i++) {
@@ -38,9 +36,10 @@ public class Simulation : MonoBehaviour {
 			float newTurnAngle = Random.Range(1.0f, 180.0f);
 			float newVisRange = Random.Range(1.0f, 5.0f);
             float newSize = Random.Range(1.0f, 3.0f);
+
 			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange, newSize});
 
-            //Randomize color
+			//Randomize color
             Color newColor = new Color(Random.value, Random.value, Random.value, 1.0f);
 
             //Assign the random chromosomes to the fish
@@ -85,9 +84,6 @@ public class Simulation : MonoBehaviour {
 	}
 
 	private void SortFishByFitness () {
-        //Pause simulation during reproduction
-        Time.timeScale = 0;
-
         //sort the list by the amount of food eaten
         fishList.Sort(
             delegate (GameObject x, GameObject y) {
@@ -155,12 +151,10 @@ public class Simulation : MonoBehaviour {
 
         colorList.Clear();
 
-        //Mutate
-        Mutate();
-
-		Time.timeScale = 4; //resume simmulation
-
-        SpawnFood();
+		//Mutate
+		Mutate();
+        
+		SpawnFood();
     }
 
 	//Get a random parent based on fitness
