@@ -16,9 +16,13 @@ public class Simulation : MonoBehaviour {
     public List<Color> colorList;
 	private float timer;
     private int generation = 1;
+	private int foodCount;
+
 
 	// Use this for initialization
 	void Start () {
+
+		foodCount = foodAmount;
 		
         //Instantiate fishes and store them in a list (first generation)
         fishList = new List<GameObject> ();
@@ -32,9 +36,9 @@ public class Simulation : MonoBehaviour {
 		for (int i = 0; i < populationSize; i++) {
 
 			//TODO Replace numbers with variables
-			float newSpeed = Random.Range(0.1f, 1.0f);
-			float newTurnAngle = Random.Range(0.1f, 5.0f);
-			float newVisRange = Random.Range(0.01f, 2.0f);
+			float newSpeed = Random.Range(0.01f, 5.0f);
+			float newTurnAngle = Random.Range(0.01f, 180.0f);
+			float newVisRange = Random.Range(0.01f, 100.0f);
             float newSize = Random.Range(1f, 3.0f);
 
 
@@ -65,13 +69,25 @@ public class Simulation : MonoBehaviour {
             Instantiate(food, position, Quaternion.identity);
         }
     }
+
+	public void removeFood() {
+		foodCount -= 1;
+	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (foodCount <= 0) {
+			timer = 0;
+			ReproduceGeneration ();
+			foodCount = foodAmount;
+		}
+
 		timer += Time.deltaTime;
 		if (timer > generationTime) {
 			timer = 0;
 			ReproduceGeneration ();
+			foodCount = foodAmount;
 		}
 	}
 

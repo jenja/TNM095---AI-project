@@ -32,7 +32,7 @@ public class Fish : MonoBehaviour {
         this.GetComponent<Fish>().transform.localScale = new Vector3(size,size,1);
 
         //initiate forward direction
-        forwardDirection = new Vector2(1, 1);
+		forwardDirection = new Vector2(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 		forwardDirection.Normalize ();
 	}
 
@@ -50,18 +50,17 @@ public class Fish : MonoBehaviour {
 		else {
 			Vector2 foodDirection = (GetClosestObjectWithTag ("food").transform.position - transform.position) ;
 			float angleToFood = Vector2.Angle(forwardDirection, foodDirection);
+			float tempTurnAngle = turnAngle;
 
-			if(Vector3.Cross (forwardDirection, foodDirection).z < 0)
+			if (Vector3.Cross (forwardDirection, foodDirection).z < 0) {
 				angleToFood = -angleToFood;
+				tempTurnAngle = -tempTurnAngle;
+			}
 
-			if (angleToFood > turnAngle)
-				forwardDirection = Quaternion.Euler (0, 0, turnAngle * Time.deltaTime) * forwardDirection;
+			if (Mathf.Abs(angleToFood) > Mathf.Abs(tempTurnAngle))
+				forwardDirection = Quaternion.Euler (0, 0, tempTurnAngle * Time.deltaTime) * forwardDirection;
 			else
 				forwardDirection = Quaternion.Euler (0, 0, angleToFood * Time.deltaTime) * forwardDirection;
-				
-
-
-//			Debug.Log ("Angle: " + angleToFood);
 		}
 
 		//Move individual forward with constant speed
@@ -104,7 +103,7 @@ public class Fish : MonoBehaviour {
 
 	private void detectFood() {
 		GameObject closestFood = GetClosestObjectWithTag ("food"); 
-		if (Vector2.Distance (transform.position, closestFood.transform.position) <= visabilityRange)
+		if (closestFood != null && Vector2.Distance (transform.position, closestFood.transform.position) <= visabilityRange)
 			foodInRange = true;
 		else
 			foodInRange = false;
@@ -113,6 +112,10 @@ public class Fish : MonoBehaviour {
 	//Returns the closest gameobject of a specific tag
 	private GameObject GetClosestObjectWithTag(string tag) {
 		GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag (tag);
+
+		if (objectsWithTag.Length == 0)
+			return null;
+
 		GameObject closestObject = objectsWithTag[0];
 	
 		foreach (GameObject obj in objectsWithTag) {
@@ -129,6 +132,7 @@ public class Fish : MonoBehaviour {
         if(coll.gameObject.tag == "food") {
             this.food = this.food + 1;
             Destroy(coll.gameObject);
+			GameObject.Find ("Simulation").GetComponent<Simulation> ().removeFood ();
         }
     }
 }
