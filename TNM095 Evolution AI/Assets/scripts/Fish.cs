@@ -26,7 +26,7 @@ public class Fish : MonoBehaviour {
 		speed = chromosome[0];
 		turnAngle = chromosome[1];
 		visabilityRange = chromosome[2];
-        size = chromosome[3];
+		size = chromosome[3];
 
         this.GetComponent<SpriteRenderer>().color = color;
         this.GetComponent<Fish>().transform.localScale = new Vector3(size,size,1);
