@@ -28,12 +28,12 @@ public class Fish : MonoBehaviour {
 		visabilityRange = chromosome[2];
         size = chromosome[3];
 
-		//initiate forward direction
-		forwardDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-		forwardDirection.Normalize ();
-
         this.GetComponent<SpriteRenderer>().color = color;
-        this.GetComponent<Fish>().transform.localScale += new Vector3(size,size,1);
+        this.GetComponent<Fish>().transform.localScale = new Vector3(size,size,1);
+
+        //initiate forward direction
+        forwardDirection = new Vector2(1, 1);
+		forwardDirection.Normalize ();
 	}
 
 	// Update is called once per frame

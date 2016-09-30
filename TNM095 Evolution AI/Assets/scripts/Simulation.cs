@@ -35,7 +35,8 @@ public class Simulation : MonoBehaviour {
 			float newSpeed = Random.Range(0.1f, 1.0f);
 			float newTurnAngle = Random.Range(0.1f, 5.0f);
 			float newVisRange = Random.Range(0.01f, 2.0f);
-            float newSize = Random.Range(0.01f, 1.0f);
+            float newSize = Random.Range(1f, 3.0f);
+
 
 			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange, newSize});
 
@@ -194,8 +195,6 @@ public class Simulation : MonoBehaviour {
 					
 					float mutateAmount = mutationMagnitude * currentChromosome [k];
 					currentChromosome[k] += Random.Range (-mutateAmount, mutateAmount);
-
-					//Debug.Log ("Fish Mutated: k = " + k + ", new value = " + currentChromosome [k]);
 				}
 				else
 					continue;
