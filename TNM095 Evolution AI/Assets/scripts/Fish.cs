@@ -27,7 +27,7 @@ public class Fish : MonoBehaviour {
 		visabilityRange = chromosome[2];
 
 		//initiate forward direction
-		forwardDirection = new Vector2(1, 1);
+		forwardDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
 		forwardDirection.Normalize ();
 	}
 

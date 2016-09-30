@@ -17,9 +17,7 @@ public class Simulation : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
-//        Time.timeScale = 1;
-
+		
         //Instantiate fishes and store them in a list (first generation)
         fishList = new List<GameObject> ();
 		for (int i = 0; i < populationSize; i++) {
@@ -33,7 +31,7 @@ public class Simulation : MonoBehaviour {
 
 			//TODO Replace numbers with variables
 			float newSpeed = Random.Range(1, 5);
-			float newTurnAngle = Random.Range(1, 180);
+			float newTurnAngle = Random.Range(1, 359);
 			float newVisRange = Random.Range(1, 5);
 			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange});
 		}
@@ -77,9 +75,6 @@ public class Simulation : MonoBehaviour {
 	}
 
 	private void SortFishByFitness () {
-        //Pause simulation during reproduction
-//        Time.timeScale = 0;
-
         //sort the list by the amount of food eaten
         fishList.Sort(
             delegate (GameObject x, GameObject y) {
@@ -103,9 +98,6 @@ public class Simulation : MonoBehaviour {
             float[] fishDad = calcParent();
             float[] fishMom = calcParent();
             float[] fishKid = fishDad;
-
-//            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
-//            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
 
             int temp = Random.Range(0, fishDad.Length - 1);
 
@@ -149,9 +141,6 @@ public class Simulation : MonoBehaviour {
 
 		//Mutate
 		Mutate();
-
-//		Time.timeScale = 1; //resume simmulation
-
         SpawnFood();
     }
 
