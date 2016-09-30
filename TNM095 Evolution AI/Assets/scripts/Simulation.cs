@@ -38,18 +38,10 @@ public class Simulation : MonoBehaviour {
 		for (int i = 0; i < populationSize; i++) {
 
 			//TODO Replace numbers with variables
-<<<<<<< HEAD
 			float newSpeed = Random.Range(0.025f, 1.0f);
 			float newTurnAngle = Random.Range(90.0f, 180.0f);
 			float newVisRange = Random.Range(0.5f, 2.0f);
             float newSize = Random.Range(0.5f, 1.5f);
-=======
-			float newSpeed = Random.Range(0.01f, 5.0f);
-			float newTurnAngle = Random.Range(0.01f, 180.0f);
-			float newVisRange = Random.Range(0.1f, 10.0f);
-            float newSize = Random.Range(1f, 3.0f);
->>>>>>> cbc54dad68b5b2c7706bad27f80ff1064856485a
-
 
 			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange, newSize});
 
