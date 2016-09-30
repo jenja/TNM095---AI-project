@@ -30,7 +30,7 @@ public class Fish : MonoBehaviour {
         size = chromosome[3];
 
         this.GetComponent<SpriteRenderer>().color = color;
-        this.GetComponent<Fish>().transform.localScale += new Vector3(size,size,1);
+        this.GetComponent<Fish>().transform.localScale = new Vector3(size,size,1);
 
         //initiate forward direction
         forwardDirection = new Vector2(1, 1);
