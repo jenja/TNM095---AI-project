@@ -103,6 +103,7 @@ public class Simulation : MonoBehaviour {
 		SortFishByFitness ();
 
 		AddStatsToArchive ();
+		GameObject.Find ("UI Controller").GetComponent<UI> ().addGenerationToDropDown (generation);
 
         SpawnNextGen (GenerateChromosomes ());
 

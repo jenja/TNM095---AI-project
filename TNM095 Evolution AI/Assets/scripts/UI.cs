@@ -11,9 +11,11 @@ public class UI : MonoBehaviour {
 	public GameObject simulationPanel;
 	public GameObject statPanel;
 	public GameObject showUiButton;
+	public Dropdown genDropDown;
 	public Text generationText;
 
 	private bool hide;
+	private List<string> dropDownList;
 
 	void Start() {
 		hide = false;
@@ -22,11 +24,18 @@ public class UI : MonoBehaviour {
 
 		simulationPanel.SetActive (false);
 		statPanel.SetActive (false);
+
+		dropDownList = new List<string> ();
 	}
 
 	void Update() {
-
 		Time.timeScale = simulationSpeed;
+	}
+
+	public void addGenerationToDropDown(int gen) {
+		dropDownList.Add ("Generation " + gen);
+		genDropDown.options.Clear ();
+		genDropDown.AddOptions (dropDownList);
 	}
 
 	public void HideShow() {
