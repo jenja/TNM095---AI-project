@@ -57,6 +57,35 @@ public class Fish : MonoBehaviour {
 		if 		(newX != 0 && newY != 0)	transform.position = new Vector2 (newX, newY);
 		else if (newX != 0 && newY == 0)	transform.position = new Vector2 (newX, transform.position.y);
 		else if (newX == 0 && newY != 0)	transform.position = new Vector2 (transform.position.x, newY);
+	
+		//TEST: draw line to closest food
+		drawLineTo(GetClosestObjectWithTag("food"));
+	}
+
+	//Draw line between fish and gameobject (FOR DEBUGGING)
+	private void drawLineTo(GameObject obj) {
+		GameObject go = new GameObject ();
+		LineRenderer lr = go.AddComponent<LineRenderer> ();
+		lr.SetWidth (0.01f, 0.01f);
+
+		lr.SetPosition (0, gameObject.transform.position);
+		lr.SetPosition (1, obj.transform.position);
+	}
+
+	//Draw visability range (FOR DEBUGGING)
+
+	//Returns the closest gameobject of a specific tag
+	private GameObject GetClosestObjectWithTag(string tag) {
+		GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag (tag);
+		GameObject closestObject = objectsWithTag[0];
+	
+		foreach (GameObject obj in objectsWithTag) {
+			if(Vector2.Distance(transform.position, obj.transform.position) < 
+				Vector2.Distance(transform.position, closestObject.transform.position)) {
+				closestObject = obj;
+			}
+		}
+		return closestObject;
 	}
 
     //Check collision 
