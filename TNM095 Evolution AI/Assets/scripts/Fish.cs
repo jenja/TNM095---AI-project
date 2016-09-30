@@ -12,10 +12,9 @@ public class Fish : MonoBehaviour {
 	private float turnAngle;
 	private float visabilityRange;
     private float size;
+	private bool foodInRange = false;
 
 	private Vector2 forwardDirection;
-
-	private const float SPEED_REDUCTION = 0.25f;
 
     // Use this for initialization
     void Start() {
@@ -41,12 +40,32 @@ public class Fish : MonoBehaviour {
 	void Update () {
 
 		//Update forward direction with a random angle within the units maximum turnAngle
-		float randomAngle = Random.Range(-turnAngle, turnAngle);
-		forwardDirection = Quaternion.Euler (0, 0, randomAngle) * forwardDirection;
-		forwardDirection.Normalize();
+		if (!foodInRange) {
+			float randomAngle = Random.Range (-turnAngle, turnAngle);
+			forwardDirection = Quaternion.Euler (0, 0, randomAngle) * forwardDirection;
+			forwardDirection.Normalize ();
+		} 
+
+		//Target the closest food in range and turn towards it
+		else {
+			Vector2 foodDirection = (GetClosestObjectWithTag ("food").transform.position - transform.position) ;
+			float angleToFood = Vector2.Angle(forwardDirection, foodDirection);
+
+			if(Vector3.Cross (forwardDirection, foodDirection).z < 0)
+				angleToFood = -angleToFood;
+
+			if (angleToFood > turnAngle)
+				forwardDirection = Quaternion.Euler (0, 0, turnAngle * Time.deltaTime) * forwardDirection;
+			else
+				forwardDirection = Quaternion.Euler (0, 0, angleToFood * Time.deltaTime) * forwardDirection;
+				
+
+
+//			Debug.Log ("Angle: " + angleToFood);
+		}
 
 		//Move individual forward with constant speed
-		transform.Translate(forwardDirection * Time.deltaTime * speed * SPEED_REDUCTION);
+		transform.Translate(forwardDirection * Time.deltaTime * speed);
 
 		//teleport fish to other side when outstepping boundries
 		GameObject world = GameObject.Find("World");
@@ -65,7 +84,12 @@ public class Fish : MonoBehaviour {
 		else if (newX == 0 && newY != 0)	transform.position = new Vector2 (transform.position.x, newY);
 	
 		//TEST: draw line to closest food
-		drawLineTo(GetClosestObjectWithTag("food"));
+		//drawLineTo(GetClosestObjectWithTag("food"));
+
+		//Check if food is in vision
+		detectFood ();
+
+		//Debug.Log ("food in range: " + foodInRange);
 	}
 
 	//Draw line between fish and gameobject (FOR DEBUGGING)
@@ -78,7 +102,13 @@ public class Fish : MonoBehaviour {
 		lr.SetPosition (1, obj.transform.position);
 	}
 
-	//Draw visability range (FOR DEBUGGING)
+	private void detectFood() {
+		GameObject closestFood = GetClosestObjectWithTag ("food"); 
+		if (Vector2.Distance (transform.position, closestFood.transform.position) <= visabilityRange)
+			foodInRange = true;
+		else
+			foodInRange = false;
+	}
 
 	//Returns the closest gameobject of a specific tag
 	private GameObject GetClosestObjectWithTag(string tag) {

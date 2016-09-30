@@ -32,10 +32,10 @@ public class Simulation : MonoBehaviour {
 		for (int i = 0; i < populationSize; i++) {
 
 			//TODO Replace numbers with variables
-			float newSpeed = Random.Range(1.0f, 5.0f);
-			float newTurnAngle = Random.Range(1.0f, 180.0f);
-			float newVisRange = Random.Range(1.0f, 5.0f);
-            float newSize = Random.Range(0.0f, 1.0f);
+			float newSpeed = Random.Range(0.1f, 1.0f);
+			float newTurnAngle = Random.Range(0.1f, 5.0f);
+			float newVisRange = Random.Range(0.01f, 2.0f);
+            float newSize = Random.Range(0.01f, 1.0f);
 
 			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange, newSize});
 
@@ -80,7 +80,7 @@ public class Simulation : MonoBehaviour {
         SpawnNextGen (GenerateChromosomes ());
 
         generation++;
-        Debug.Log("GENERATION: " + generation);
+        //Debug.Log("GENERATION: " + generation);
 	}
 
 	private void SortFishByFitness () {
@@ -90,6 +90,10 @@ public class Simulation : MonoBehaviour {
                 return y.GetComponent<Fish>().food.CompareTo(x.GetComponent<Fish>().food);
             }
         );
+		Debug.Log ("Alpha: [" + fishList [0].GetComponent<Fish> ().chromosome [0] +
+		", " + fishList [0].GetComponent<Fish> ().chromosome [1] +
+		", " + fishList [0].GetComponent<Fish> ().chromosome [2] +
+		", " + fishList [0].GetComponent<Fish> ().chromosome [3] + "]");
     }
 
 	//Get the poopulations total fitness
@@ -191,7 +195,7 @@ public class Simulation : MonoBehaviour {
 					float mutateAmount = mutationMagnitude * currentChromosome [k];
 					currentChromosome[k] += Random.Range (-mutateAmount, mutateAmount);
 
-					Debug.Log ("Fish Mutated: k = " + k + ", new value = " + currentChromosome [k]);
+					//Debug.Log ("Fish Mutated: k = " + k + ", new value = " + currentChromosome [k]);
 				}
 				else
 					continue;
