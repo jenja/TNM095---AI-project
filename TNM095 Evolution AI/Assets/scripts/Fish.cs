@@ -7,8 +7,9 @@ public class Fish : MonoBehaviour {
 	public int food;
     public Color color;
 	public float[] chromosome;
+    public bool mutant = false;
 
-	private float speed;
+    private float speed;
 	private float turnAngle;
 	private float visabilityRange;
     private float size;
@@ -31,8 +32,12 @@ public class Fish : MonoBehaviour {
         this.GetComponent<SpriteRenderer>().color = color;
         this.GetComponent<Fish>().transform.localScale = new Vector3(size,size,1);
 
+        if (mutant) {
+            this.GetComponent<SpriteRenderer>().color = Color.black;
+        }
+
         //initiate forward direction
-		forwardDirection = new Vector2(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+		forwardDirection = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
 		forwardDirection.Normalize ();
 	}
 
