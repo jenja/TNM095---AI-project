@@ -13,7 +13,9 @@ public class Simulation : MonoBehaviour {
     public GameObject food;
 
 	private List<GameObject> fishList;
+    public List<Color> colorList;
 	private float timer;
+    private int generation = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -35,14 +37,17 @@ public class Simulation : MonoBehaviour {
 			float newSpeed = Random.Range(1.0f, 5.0f);
 			float newTurnAngle = Random.Range(1.0f, 180.0f);
 			float newVisRange = Random.Range(1.0f, 5.0f);
-			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange});
-		}
+            float newSize = Random.Range(0.0f, 1.0f);
+			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange, newSize});
 
-		//Assign the random chromosomes to the fish
-		for (int i = 0; i < populationSize; i++) {
-			GameObject tempFish = fishList [i];
-			tempFish.GetComponent<Fish> ().chromosome = randomDnaList [i];
-		}
+            //Randomize color
+            Color newColor = new Color(Random.value, Random.value, Random.value, 1.0f);
+
+            //Assign the random chromosomes to the fish
+            GameObject tempFish = fishList[i];
+            tempFish.GetComponent<Fish>().chromosome = randomDnaList[i];
+            tempFish.GetComponent<Fish>().color = newColor;
+        }
 
         //Spawn food in a set interval
         //InvokeRepeating("SpawnFood", 0.0f, 5.0f);
@@ -74,6 +79,9 @@ public class Simulation : MonoBehaviour {
 
 		SortFishByFitness ();
         SpawnNextGen (GenerateChromosomes ());
+
+        generation++;
+        Debug.Log("GENERATION: " + generation);
 	}
 
 	private void SortFishByFitness () {
@@ -103,9 +111,6 @@ public class Simulation : MonoBehaviour {
             float[] fishDad = calcParent();
             float[] fishMom = calcParent();
             float[] fishKid = fishDad;
-
-//            Debug.Log("fishDad: " + fishDad[0] + "," + fishDad[1] + "," + fishDad[2]);
-//            Debug.Log("fishMom: " + fishMom[0] + "," + fishMom[1] + "," + fishMom[2]);
 
             int temp = Random.Range(0, fishDad.Length - 1);
 
@@ -144,11 +149,14 @@ public class Simulation : MonoBehaviour {
 	private void SpawnNextGen (List<float[]> chromosomeList) {
 		for (int i = 0; i < populationSize; i++) {
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
-			fishList [i].GetComponent<Fish> ().chromosome = chromosomeList [i];
-		}
+			fishList[i].GetComponent<Fish>().chromosome = chromosomeList [i];
+            fishList[i].GetComponent<Fish>().color = colorList[i + 1];
+        }
 
-		//Mutate
-		Mutate();
+        colorList.Clear();
+
+        //Mutate
+        Mutate();
 
 		Time.timeScale = 4; //resume simmulation
 
@@ -168,6 +176,7 @@ public class Simulation : MonoBehaviour {
                 continue;
             }
             else {
+                colorList.Add(fishList[i].GetComponent<Fish>().color);
                 return fishList[i].GetComponent<Fish>().chromosome;
             }
         }
