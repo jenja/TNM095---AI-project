@@ -13,6 +13,7 @@ public class Simulation : MonoBehaviour {
 	public GameObject fish;
     public GameObject food;
     public GameObject shark;
+	public float idleTurnTime;
 
 	public List<GameObject> fishList;
     private List<GameObject> sharkList;
@@ -23,16 +24,20 @@ public class Simulation : MonoBehaviour {
     private int generation = 1;
 	private int foodCount;
 
+	private List<List<List<float>>> archiveList;
 
 	// Use this for initialization
 	void Start () {
 
 		foodCount = foodAmount;
 		
-        //Instantiate fishes and store them in a list (first generation)
         fishList = new List<GameObject> ();
+
+		archiveList = new List<List<List<float>>>();
+
+		//Instantiate fishes and store them in a list (first generation)
 		for (int i = 0; i < populationSizeFish; i++) {
-            
+
 			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
 		}
 
@@ -47,11 +52,11 @@ public class Simulation : MonoBehaviour {
 		for (int i = 0; i < populationSizeFish; i++) {
 
 			//TODO Replace numbers with variables
-			float newSpeed = Random.Range(0.01f, 5.0f);
-			float newTurnAngle = Random.Range(0.01f, 180.0f);
-			float newVisRange = Random.Range(0.1f, 10.0f);
-            float newSize = Random.Range(1.0f, 3.0f);
 
+			float newSpeed = Random.Range(0.025f, 1.0f);
+			float newTurnAngle = Random.Range(90.0f, 180.0f);
+			float newVisRange = Random.Range(0.5f, 2.0f);
+            float newSize = Random.Range(0.5f, 1.5f);
 
 			randomDnaListFish.Add (new float[] {newSpeed, newTurnAngle, newVisRange, newSize});
 
@@ -93,6 +98,10 @@ public class Simulation : MonoBehaviour {
 		timer = 0;
 	}
 
+	public int getGeneration() {
+		return generation;
+	}
+
     //Spawn a certain amount of food
     void SpawnFood() {
 		for (int i = 0; i < foodAmount; i++){
@@ -102,6 +111,12 @@ public class Simulation : MonoBehaviour {
             Instantiate(food, position, Quaternion.identity);
         }
     }
+
+	/** Public functions **/
+
+	public List<List<List<float>>> getArchive() {
+		return this.archiveList;
+	}
 
 	public void removeFood() {
 		foodCount -= 1;
@@ -137,6 +152,9 @@ public class Simulation : MonoBehaviour {
         SortFishByFitness(sharkList, "shark");
         SpawnNextGen(GenerateChromosomes(sharkList, "shark"), sharkList, "shark");
 
+		AddStatsToArchive ();
+		GameObject.Find ("UI Controller").GetComponent<UI> ().addGenerationToDropDown (generation);
+
         generation++;
 	}
 
@@ -160,6 +178,21 @@ public class Simulation : MonoBehaviour {
                 break;
         }
     }
+
+	//Add old generation stats to the archive
+	private void AddStatsToArchive() {
+		List<List<float>> tempStatList = new List<List<float>>();
+
+		foreach (GameObject fish in fishList) {
+			List<float> tempStats = new List<float> ();
+
+			foreach (float stat in fish.GetComponent<Fish>().chromosome) {
+				tempStats.Add (stat);
+			}
+			tempStatList.Add (tempStats);
+		}
+		archiveList.Add(tempStatList);
+	}
 
 	//Get the poopulations total fitness
 	private int GetTotalFitness(List<GameObject> speciesList, string species) {

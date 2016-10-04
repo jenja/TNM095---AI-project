@@ -3,7 +3,7 @@ using System.Collections;
 
 public class World : MonoBehaviour {
 
-	public float xBoundry = 5;
+	public float xBoundry = 8;
 	public float yBoundry = 5;
 
 	// Use this for initialization
