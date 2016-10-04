@@ -23,6 +23,8 @@ public class Fish : MonoBehaviour {
     // Use this for initialization
     void Start() {
 
+		//random comment
+
         this.food = 0;
 		//TODO move the random functionality to simulatio scripts
 
