@@ -62,6 +62,10 @@ public class Simulation : MonoBehaviour {
 		timer = 0;
 	}
 
+	public int getGeneration() {
+		return generation;
+	}
+
     //Spawn a certain amount of food
     void SpawnFood() {
 		for (int i = 0; i < foodAmount; i++){

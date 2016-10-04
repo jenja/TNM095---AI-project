@@ -17,6 +17,8 @@ public class UI : MonoBehaviour {
 	private bool hide;
 	private List<string> dropDownList;
 
+	private bool uiTriggered = false;
+
 	void Start() {
 		hide = false;
 		simulationSpeed = 1;
@@ -30,6 +32,12 @@ public class UI : MonoBehaviour {
 
 	void Update() {
 		Time.timeScale = simulationSpeed;
+
+		//Make sure ui updates properly after first generation
+		if (!uiTriggered && GameObject.Find ("Simulation").GetComponent<Simulation> ().getGeneration() == 2) {
+			DisplayIndividuals ();
+			uiTriggered = true;
+		}
 	}
 
 	public void addGenerationToDropDown(int gen) {
@@ -47,7 +55,10 @@ public class UI : MonoBehaviour {
 
 	public void DisplayIndividuals() {
 		List<List<List<float>>> archive = GameObject.Find ("Simulation").GetComponent<Simulation> ().getArchive ();
-	
+
+		//get generation from dropdown
+		genDisplayChoice = genDropDown.value;
+
 		//Check if generation exists
 		if (genDisplayChoice >= archive.Count) {
 			generationText.text = "No data recorded for this generation...";
