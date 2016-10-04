@@ -11,6 +11,7 @@ public class Simulation : MonoBehaviour {
 	public float generationTime;
 	public GameObject fish;
     public GameObject food;
+	public float idleTurnTime;
 
 	private List<GameObject> fishList;
     public List<Color> colorList;

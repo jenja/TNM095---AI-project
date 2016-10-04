@@ -9,11 +9,14 @@ public class Fish : MonoBehaviour {
 	public float[] chromosome;
     public bool mutant = false;
 
+
     private float speed;
 	private float turnAngle;
 	private float visabilityRange;
     private float size;
 	private bool foodInRange = false;
+	private float randomAngle;
+	private float turnTimer;
 
 	private Vector2 forwardDirection;
 
@@ -22,6 +25,9 @@ public class Fish : MonoBehaviour {
 
         this.food = 0;
 		//TODO move the random functionality to simulatio scripts
+
+		turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
+		randomAngle = 0;
 
 		//Give the fish random values
 		speed = chromosome[0];
@@ -44,12 +50,18 @@ public class Fish : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		//Update forward direction with a random angle within the units maximum turnAngle
+		//Fish moves randomly when no food is sensed
 		if (!foodInRange) {
-			float randomAngle = Random.Range (-turnAngle, turnAngle);
-			forwardDirection = Quaternion.Euler (0, 0, randomAngle) * forwardDirection;
+			
+			if(turnTimer <= 0) {
+				randomAngle = Random.Range (-turnAngle, turnAngle);	
+				turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
+			}
+
+			forwardDirection = Quaternion.Euler (0, 0, randomAngle * Time.deltaTime) * forwardDirection;
 			forwardDirection.Normalize ();
-		} 
+			turnTimer -= Time.deltaTime;
+		}
 
 		//Target the closest food in range and turn towards it
 		else {
