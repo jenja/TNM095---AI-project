@@ -4,6 +4,16 @@ using System.Collections.Generic;
 
 public class Simulation : MonoBehaviour {
 
+	//Initial constraints
+	public float minSpeed;
+	public float minTurnAngle;
+	public float minVisRange;
+	public float minSize;
+	public float maxSpeed;
+	public float maxTurnAngle;
+	public float maxVisRange;
+	public float maxSize;
+
 	public int populationSize;
     public int foodAmount;
 	public int mutatonChanse;
@@ -39,10 +49,10 @@ public class Simulation : MonoBehaviour {
 		for (int i = 0; i < populationSize; i++) {
 
 			//TODO Replace numbers with variables
-			float newSpeed = Random.Range(0.025f, 1.0f);
-			float newTurnAngle = Random.Range(90.0f, 180.0f);
-			float newVisRange = Random.Range(0.5f, 2.0f);
-            float newSize = Random.Range(0.5f, 1.5f);
+			float newSpeed = Random.Range(minSpeed, maxSpeed);
+			float newTurnAngle = Random.Range(minTurnAngle, maxTurnAngle);
+			float newVisRange = Random.Range(minVisRange, maxVisRange);
+			float newSize = Random.Range(minSize, maxSize);
 
 			randomDnaList.Add (new float[] {newSpeed, newTurnAngle, newVisRange, newSize});
 
