@@ -27,7 +27,7 @@ public class Fish : MonoBehaviour {
 		//TODO move the random functionality to simulatio scripts
 
 		turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
-		randomAngle = 0;
+		randomAngle = Random.Range (-turnAngle, turnAngle);
 
 		//Give the fish random values
 		speed = chromosome[0];

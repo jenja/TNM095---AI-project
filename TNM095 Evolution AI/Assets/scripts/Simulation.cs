@@ -6,6 +6,17 @@ public class Simulation : MonoBehaviour {
 
 	public int populationSizeFish;
     public int populationSizeShark;
+
+	//Initial constraints
+	public float minSpeed;
+	public float minTurnAngle;
+	public float minVisRange;
+	public float minSize;
+	public float maxSpeed;
+	public float maxTurnAngle;
+	public float maxVisRange;
+	public float maxSize;
+
     public int foodAmount;
 	public int mutatonChanse;
 	public float mutationMagnitude;
@@ -53,10 +64,10 @@ public class Simulation : MonoBehaviour {
 
 			//TODO Replace numbers with variables
 
-			float newSpeed = Random.Range(0.025f, 1.0f);
-			float newTurnAngle = Random.Range(90.0f, 180.0f);
-			float newVisRange = Random.Range(0.5f, 2.0f);
-            float newSize = Random.Range(0.5f, 1.5f);
+			float newSpeed = Random.Range(minSpeed, maxSpeed);
+			float newTurnAngle = Random.Range(minTurnAngle, maxTurnAngle);
+			float newVisRange = Random.Range(minVisRange, maxVisRange);
+			float newSize = Random.Range(minSize, maxSize);
 
 			randomDnaListFish.Add (new float[] {newSpeed, newTurnAngle, newVisRange, newSize});
 
