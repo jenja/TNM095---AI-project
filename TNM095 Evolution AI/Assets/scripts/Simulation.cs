@@ -46,16 +46,19 @@ public class Simulation : MonoBehaviour {
 
 		archiveList = new List<List<List<float>>>();
 
-		//Instantiate fishes and store them in a list (first generation)
-		for (int i = 0; i < populationSizeFish; i++) {
+        World worldScript = GameObject.Find("World").GetComponent<World>();
 
-			fishList.Add ((GameObject)Instantiate (fish, transform.position, Quaternion.identity));
+        //Instantiate fishes and store them in a list (first generation)
+        for (int i = 0; i < populationSizeFish; i++) {
+            Vector3 position = new Vector3(Random.Range(-worldScript.xBoundry, worldScript.xBoundry), Random.Range(-worldScript.yBoundry, worldScript.yBoundry), 0);
+            fishList.Add ((GameObject)Instantiate (fish, position, Quaternion.identity));
 		}
 
         sharkList = new List<GameObject>();
         for (int i = 0; i < populationSizeShark; i++)
         {
-            sharkList.Add((GameObject)Instantiate(shark, new Vector3(2.0f, 2.0f, 0), Quaternion.identity));
+            Vector3 position = new Vector3(Random.Range(-worldScript.xBoundry, worldScript.xBoundry), Random.Range(-worldScript.yBoundry, worldScript.yBoundry), 0);
+            sharkList.Add((GameObject)Instantiate(shark, position, Quaternion.identity));
         }
 
         //Randomize first generations chromosomes
@@ -88,7 +91,7 @@ public class Simulation : MonoBehaviour {
             float newSpeed = Random.Range(0.01f, 5.0f);
             float newTurnAngle = Random.Range(0.01f, 180.0f);
             float newVisRange = Random.Range(0.1f, 10.0f);
-            float newSize = Random.Range(0.5f, 1.5f);
+            float newSize = Random.Range(0.5f, 1.0f);
 
 
             randomDnaListShark.Add(new float[] { newSpeed, newTurnAngle, newVisRange, newSize });
@@ -292,14 +295,18 @@ public class Simulation : MonoBehaviour {
     }
 
 	//Apply the new chromosomes and spawn the new generation
-	private void SpawnNextGen (List<float[]> chromosomeList, List<GameObject> speciesList, string species) {	
+	private void SpawnNextGen (List<float[]> chromosomeList, List<GameObject> speciesList, string species) {
+
+        World worldScript = GameObject.Find("World").GetComponent<World>();
 
         switch (species)
         {
             case "fish":
                 for (int i = 0; i < populationSizeFish; i++)
                 {
-                    speciesList.Add((GameObject)Instantiate(fish, transform.position, Quaternion.identity));
+                    Vector3 position = new Vector3(Random.Range(-worldScript.xBoundry, worldScript.xBoundry), Random.Range(-worldScript.yBoundry, worldScript.yBoundry), 0);
+
+                    speciesList.Add((GameObject)Instantiate(fish, position, Quaternion.identity));
                     speciesList[i].GetComponent<Fish>().chromosome = chromosomeList[i];
                     speciesList[i].GetComponent<Fish>().color = colorListFish[i + 1];
                 }
@@ -312,7 +319,9 @@ public class Simulation : MonoBehaviour {
             case "shark":
                 for (int i = 0; i < populationSizeShark; i++)
                 {
-                    speciesList.Add((GameObject)Instantiate(shark, new Vector3(2.0f, 2.0f, 0), Quaternion.identity));
+                    Vector3 position = new Vector3(Random.Range(-worldScript.xBoundry, worldScript.xBoundry), Random.Range(-worldScript.yBoundry, worldScript.yBoundry), 0);
+
+                    speciesList.Add((GameObject)Instantiate(shark, position, Quaternion.identity));
                     speciesList[i].GetComponent<Shark>().chromosome = chromosomeList[i];
                     speciesList[i].GetComponent<Shark>().color = colorListShark[i + 1];
                 }
