@@ -109,13 +109,19 @@ public class Simulation : MonoBehaviour {
 		timer = 0;
 	}
 
+	// _____ GETTERS ______
+
 	public int getGeneration() {
 		return generation;
 	}
 
+	public int getFoodCount() {
+		return foodCount;
+	}
+
     //Spawn a certain amount of food
     void SpawnFood() {
-		for (int i = 0; i < foodAmount; i++){
+		for (int i = 0; i < foodAmount; i++) {
             //Randomize position
 			World worldScript = GameObject.Find("World").GetComponent<World>();
 			Vector3 position = new Vector3(Random.Range(-worldScript.xBoundry, worldScript.xBoundry), Random.Range(-worldScript.yBoundry, worldScript.yBoundry), 0);
@@ -136,12 +142,20 @@ public class Simulation : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		//Check if fish runs out
+		if(fishList.Count <= 0) {
+			Debug.Log ("All fish were eaten.");
+			Debug.Break ();
+		}
+
+		//Check if food runs out
 		if (foodCount <= 0) {
 			timer = 0;
 			ReproduceGeneration ();
 			foodCount = foodAmount;
 		}
 
+		//start next generation when time runs out
 		timer += Time.deltaTime;
 		if (timer > generationTime) {
 			timer = 0;

@@ -19,15 +19,12 @@ public class Fish : MonoBehaviour {
 	private float turnTimer;
 
 	private Vector2 forwardDirection;
+	GameObject closestFood = null;
 
     // Use this for initialization
     void Start() {
 
-		//random comment
-
         this.food = 0;
-		//TODO move the random functionality to simulatio scripts
-
 		turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
 		randomAngle = Random.Range (-turnAngle, turnAngle);
 
@@ -53,7 +50,7 @@ public class Fish : MonoBehaviour {
 	void Update () {
 
 		//Fish moves randomly when no food is sensed
-		if (!foodInRange) {
+		if (!foodInRange || GameObject.Find("Simulation").GetComponent<Simulation>().getFoodCount() <= 0) {
 			
 			if(turnTimer <= 0) {
 				randomAngle = Random.Range (-turnAngle, turnAngle);	
@@ -66,8 +63,8 @@ public class Fish : MonoBehaviour {
 		}
 
 		//Target the closest food in range and turn towards it
-		else {
-			Vector2 foodDirection = (GetClosestObjectWithTag ("food").transform.position - transform.position) ;
+		else if(closestFood) {
+			Vector2 foodDirection = (closestFood.transform.position - transform.position) ;
 			float angleToFood = Vector2.Angle(forwardDirection, foodDirection);
 			float tempTurnAngle = turnAngle;
 
@@ -101,27 +98,12 @@ public class Fish : MonoBehaviour {
 		else if (newX != 0 && newY == 0)	transform.position = new Vector2 (newX, transform.position.y);
 		else if (newX == 0 && newY != 0)	transform.position = new Vector2 (transform.position.x, newY);
 	
-		//TEST: draw line to closest food
-		//drawLineTo(GetClosestObjectWithTag("food"));
-
 		//Check if food is in vision
 		detectFood ();
-
-		//Debug.Log ("food in range: " + foodInRange);
 	}
-
-	//Draw line between fish and gameobject (FOR DEBUGGING)
-	private void drawLineTo(GameObject obj) {
-		GameObject go = new GameObject ();
-		LineRenderer lr = go.AddComponent<LineRenderer> ();
-		lr.SetWidth (0.01f, 0.01f);
-
-		lr.SetPosition (0, gameObject.transform.position);
-		lr.SetPosition (1, obj.transform.position);
-	}
-
+		
 	private void detectFood() {
-		GameObject closestFood = GetClosestObjectWithTag ("food"); 
+		closestFood = GetClosestObjectWithTag ("food"); 
 		if (closestFood != null && Vector2.Distance (transform.position, closestFood.transform.position) <= visabilityRange)
 			foodInRange = true;
 		else
