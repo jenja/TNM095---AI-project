@@ -22,6 +22,8 @@ public class Fish : MonoBehaviour {
 	private Vector2 forwardDirection;
 	GameObject closestFood = null;
 
+	CreatureUtils cUtils;
+
     // Use this for initialization
     void Start() {
 
@@ -45,6 +47,9 @@ public class Fish : MonoBehaviour {
         //initiate forward direction
 		forwardDirection = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
 		forwardDirection.Normalize ();
+
+		//Get utils script
+		cUtils = GameObject.Find("World").GetComponent<CreatureUtils>();
 	}
 
 	// Update is called once per frame
@@ -72,29 +77,16 @@ public class Fish : MonoBehaviour {
 		//Move individual forward with constant speed
 		transform.Translate(forwardDirection * Time.deltaTime * speed);
 
-		//teleport fish to other side when outstepping boundries
-		GameObject world = GameObject.Find("World");
-		World worldScript = world.GetComponent<World> ();
+		//teleport fish to other side or stay in boundries: Choose ONLY ONE of following!
+		cUtils.KeepWithinBoundries(gameObject);
+		//cUtils.tpToOtherSide (gameObject);
 
-		float newX = 0;
-		float newY = 0;
-
-		if(transform.position.x > worldScript.xBoundry || transform.position.x < -worldScript.xBoundry)
-			newX = -transform.position.x;
-		if(transform.position.y > worldScript.yBoundry || transform.position.y < -worldScript.yBoundry)
-			newY = -transform.position.y;
-
-		if 		(newX != 0 && newY != 0)	transform.position = new Vector2 (newX, newY);
-		else if (newX != 0 && newY == 0)	transform.position = new Vector2 (newX, transform.position.y);
-		else if (newX == 0 && newY != 0)	transform.position = new Vector2 (transform.position.x, newY);
-	
 		//Check if food is in vision
 		detectFood ();
 
         //Check if shark is in vision
         detectShark();
 	}
-
     //Target the closest food in range and turn towards it
     private void chaseFood() {
 		Vector2 foodDirection = (closestFood.transform.position - transform.position);
@@ -111,8 +103,8 @@ public class Fish : MonoBehaviour {
             forwardDirection = Quaternion.Euler(0, 0, tempTurnAngle * Time.deltaTime) * forwardDirection;
         else
             forwardDirection = Quaternion.Euler(0, 0, angleToFood * Time.deltaTime) * forwardDirection;
-
     }
+
     //Target the closest shark in range and turn from it
     private void flee() {
         Vector2 sharkDirection = (transform.position - GetClosestObjectWithTag("shark").transform.position);
