@@ -18,6 +18,8 @@ public class Shark : MonoBehaviour {
     private Vector2 forwardDirection;
 	private GameObject closestFish = null;
 
+	CreatureUtils cUtils;
+
     // Use this for initialization
     void Start()
     {
@@ -42,6 +44,9 @@ public class Shark : MonoBehaviour {
         //initiate forward direction
         forwardDirection = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
         forwardDirection.Normalize();
+
+		//Get utils script
+		cUtils = GameObject.Find("World").GetComponent<CreatureUtils>();
     }
 
     // Update is called once per frame
@@ -77,22 +82,10 @@ public class Shark : MonoBehaviour {
         //Move individual forward with constant speed
         transform.Translate(forwardDirection * Time.deltaTime * speed);
 
-        //teleport fish to other side when outstepping boundries
-        GameObject world = GameObject.Find("World");
-        World worldScript = world.GetComponent<World>();
+		//teleport fish to other side or stay in boundries: Choose ONLY ONE of following!
+		cUtils.KeepWithinBoundries(gameObject);
+		//cUtils.tpToOtherSide (gameObject);
 
-        float newX = 0;
-        float newY = 0;
-
-        if (transform.position.x > worldScript.xBoundry || transform.position.x < -worldScript.xBoundry)
-            newX = -transform.position.x;
-        if (transform.position.y > worldScript.yBoundry || transform.position.y < -worldScript.yBoundry)
-            newY = -transform.position.y;
-
-        if (newX != 0 && newY != 0) transform.position = new Vector2(newX, newY);
-        else if (newX != 0 && newY == 0) transform.position = new Vector2(newX, transform.position.y);
-        else if (newX == 0 && newY != 0) transform.position = new Vector2(transform.position.x, newY);
-	
         //Check if food is in vision
         detectFood();
     }
