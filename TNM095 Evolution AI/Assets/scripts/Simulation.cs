@@ -165,9 +165,6 @@ public class Simulation : MonoBehaviour {
 	}
 
 	private void ReproduceGeneration () {
-
-        Debug.Log("True: " + generation);
-        Debug.Log("size: " + fishList.Count);
         populationSizeFish = fishList.Count;
         populationSizeShark = sharkList.Count;
 
