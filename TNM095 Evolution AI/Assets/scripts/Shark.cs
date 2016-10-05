@@ -14,6 +14,8 @@ public class Shark : MonoBehaviour {
     private float visabilityRange;
     private float size;
     private bool foodInRange = false;
+    private float randomAngle;
+    private float turnTimer;
 
     private Vector2 forwardDirection;
 
@@ -23,6 +25,9 @@ public class Shark : MonoBehaviour {
 
         this.food = 0;
         //TODO move the random functionality to simulatio scripts
+
+        turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
+        randomAngle = Random.Range(-turnAngle, turnAngle);
 
         //Give the fish random values
         speed = chromosome[0];
@@ -50,9 +55,15 @@ public class Shark : MonoBehaviour {
         //Update forward direction with a random angle within the units maximum turnAngle
         if (!foodInRange)
         {
-            float randomAngle = Random.Range(-turnAngle, turnAngle);
+            if (turnTimer <= 0)
+            {
+                randomAngle = Random.Range(-turnAngle, turnAngle);
+                turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
+            }
+
             forwardDirection = Quaternion.Euler(0, 0, randomAngle) * forwardDirection;
             forwardDirection.Normalize();
+            turnTimer -= Time.deltaTime;
         }
 
         //Target the closest food in range and turn towards it
