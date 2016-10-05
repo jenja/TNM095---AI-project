@@ -20,15 +20,12 @@ public class Fish : MonoBehaviour {
 	private float turnTimer;
 
 	private Vector2 forwardDirection;
+	GameObject closestFood = null;
 
     // Use this for initialization
     void Start() {
 
-		//random comment
-
         this.food = 0;
-		//TODO move the random functionality to simulatio scripts
-
 		turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
 		randomAngle = Random.Range (-turnAngle, turnAngle);
 
@@ -53,9 +50,15 @@ public class Fish : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		//Fish moves randomly when no food is sensed
-		if (!foodInRange) {
-			
+        //Flee if shark is in range
+		if (sharkInRange){
+            flee();
+        }
+        //Chase food if foos is in range
+		else if (foodInRange && closestFood){
+            chaseFood();
+        }
+		else {
 			if(turnTimer <= 0) {
 				randomAngle = Random.Range (-turnAngle, turnAngle);	
 				turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
@@ -65,14 +68,6 @@ public class Fish : MonoBehaviour {
 			forwardDirection.Normalize ();
 			turnTimer -= Time.deltaTime;
 		}
-        //Flee if shark is in range
-		else if (sharkInRange){
-            flee();
-        }
-        //Chase food if foos is in range
-        else if (foodInRange){
-            chaseFood();
-        }
 
 		//Move individual forward with constant speed
 		transform.Translate(forwardDirection * Time.deltaTime * speed);
@@ -93,20 +88,16 @@ public class Fish : MonoBehaviour {
 		else if (newX != 0 && newY == 0)	transform.position = new Vector2 (newX, transform.position.y);
 		else if (newX == 0 && newY != 0)	transform.position = new Vector2 (transform.position.x, newY);
 	
-		//TEST: draw line to closest food
-		//drawLineTo(GetClosestObjectWithTag("food"));
-
 		//Check if food is in vision
 		detectFood ();
+
         //Check if shark is in vision
         detectShark();
-
-		//Debug.Log ("food in range: " + foodInRange);
 	}
 
     //Target the closest food in range and turn towards it
     private void chaseFood() {
-        Vector2 foodDirection = (GetClosestObjectWithTag("food").transform.position - transform.position);
+		Vector2 foodDirection = (closestFood.transform.position - transform.position);
         float angleToFood = Vector2.Angle(forwardDirection, foodDirection);
         float tempTurnAngle = turnAngle;
 
@@ -150,7 +141,7 @@ public class Fish : MonoBehaviour {
 	}
 
 	private void detectFood() {
-		GameObject closestFood = GetClosestObjectWithTag ("food"); 
+		closestFood = GetClosestObjectWithTag ("food"); 
 		if (closestFood != null && Vector2.Distance (transform.position, closestFood.transform.position) <= visabilityRange)
 			foodInRange = true;
 		else

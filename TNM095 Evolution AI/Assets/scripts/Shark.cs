@@ -18,6 +18,7 @@ public class Shark : MonoBehaviour {
     private float turnTimer;
 
     private Vector2 forwardDirection;
+	private GameObject closestFish = null;
 
     // Use this for initialization
     void Start()
@@ -53,24 +54,22 @@ public class Shark : MonoBehaviour {
     {
 
         //Update forward direction with a random angle within the units maximum turnAngle
-        if (!foodInRange)
-        {
+		if (!foodInRange || closestFish == null) {
             if (turnTimer <= 0)
             {
                 randomAngle = Random.Range(-turnAngle, turnAngle);
                 turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
             }
-
-            forwardDirection = Quaternion.Euler(0, 0, randomAngle) * forwardDirection;
-            forwardDirection.Normalize();
+            forwardDirection = Quaternion.Euler (0, 0, randomAngle) * forwardDirection;
+			forwardDirection.Normalize ();
             turnTimer -= Time.deltaTime;
         }
 
         //Target the closest food in range and turn towards it
-        else
-        {
-            Vector2 foodDirection = (GetClosestObjectWithTag("fish").transform.position - transform.position);
-            float angleToFood = Vector2.Angle(forwardDirection, foodDirection);
+        else {
+			Vector2 foodDirection = (closestFish.transform.position - transform.position);
+            
+			float angleToFood = Vector2.Angle(forwardDirection, foodDirection);
             float tempTurnAngle = turnAngle;
 
             if (Vector3.Cross(forwardDirection, foodDirection).z < 0)
@@ -103,32 +102,16 @@ public class Shark : MonoBehaviour {
         if (newX != 0 && newY != 0) transform.position = new Vector2(newX, newY);
         else if (newX != 0 && newY == 0) transform.position = new Vector2(newX, transform.position.y);
         else if (newX == 0 && newY != 0) transform.position = new Vector2(transform.position.x, newY);
-
-        //TEST: draw line to closest food
-        //drawLineTo(GetClosestObjectWithTag("food"));
-
+	
         //Check if food is in vision
         detectFood();
-
-        //Debug.Log ("food in range: " + foodInRange);
-    }
-
-    //Draw line between fish and gameobject (FOR DEBUGGING)
-    private void drawLineTo(GameObject obj)
-    {
-        GameObject go = new GameObject();
-        LineRenderer lr = go.AddComponent<LineRenderer>();
-        lr.SetWidth(0.01f, 0.01f);
-
-        lr.SetPosition(0, gameObject.transform.position);
-        lr.SetPosition(1, obj.transform.position);
     }
 
     private void detectFood()
     {
-        GameObject closestFood = GetClosestObjectWithTag("fish");
-        if (closestFood != null && Vector2.Distance(transform.position, closestFood.transform.position) <= visabilityRange)
-            foodInRange = true;
+		closestFish = GetClosestObjectWithTag("fish");
+		if (closestFish != null && Vector2.Distance (transform.position, closestFish.transform.position) <= visabilityRange)
+			foodInRange = true;
         else
             foodInRange = false;
     }
@@ -162,7 +145,7 @@ public class Shark : MonoBehaviour {
             this.food = this.food + 1;
             Destroy(coll.gameObject);
             GameObject.Find("Simulation").GetComponent<Simulation>().fishList.Remove(coll.gameObject);
-            GameObject.Find("Simulation").GetComponent<Simulation>().removeFood();
+            //GameObject.Find("Simulation").GetComponent<Simulation>().removeFood();
         }
     }
 }
