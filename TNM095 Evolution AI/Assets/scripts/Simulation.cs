@@ -165,14 +165,12 @@ public class Simulation : MonoBehaviour {
 	}
 
 	private void ReproduceGeneration () {
-        populationSizeFish = fishList.Count;
-        populationSizeShark = sharkList.Count;
 
         SortFishByFitness(fishList, "fish");
-        SpawnNextGen (GenerateChromosomes (fishList, "fish"), fishList, "fish");
+        SpawnNextGen (GenerateChromosomes (fishList, "fish", populationSizeFish), fishList, "fish");
 
         SortFishByFitness(sharkList, "shark");
-        SpawnNextGen(GenerateChromosomes(sharkList, "shark"), sharkList, "shark");
+        SpawnNextGen(GenerateChromosomes(sharkList, "shark", populationSizeShark), sharkList, "shark");
 
 		AddStatsToArchive ();
 		GameObject.Find ("UI Controller").GetComponent<UI> ().addGenerationToDropDown (generation);
@@ -221,20 +219,20 @@ public class Simulation : MonoBehaviour {
 		int totalFitness = 0;
         switch(species){
             case "fish":
-                for (int i = 0; i < populationSizeFish; i++)
+                for (int i = 0; i < fishList.Count; i++)
                     totalFitness += speciesList[i].GetComponent<Fish>().food;
                 break;
             case "shark":
-                for (int i = 0; i < populationSizeShark; i++)
+                for (int i = 0; i < sharkList.Count ; i++)
                     totalFitness += speciesList[i].GetComponent<Shark>().food;
                 break;
         }
         return totalFitness;
     }
 
-	private List<float[]> GenerateChromosomes(List<GameObject> speciesList, string species) { 
+	private List<float[]> GenerateChromosomes(List<GameObject> speciesList, string species, int populationSize) { 
         List<float[]> chromosomeList = new List<float[]>();
-        for (int i = 0; i < speciesList.Count; i++) {
+        for (int i = 0; i < populationSize; i++) {
 
             float[] fishDad = calcParent(speciesList, species);
             float[] fishMom = calcParent(speciesList, species);
@@ -338,8 +336,8 @@ public class Simulation : MonoBehaviour {
             case "fish":
                 randomSeed = Random.Range(0, GetTotalFitness(speciesList, "fish"));
                 counter = 0;
-
-                for (int i = 0; i < populationSizeFish; i++)
+            
+                for (int i = 0; i < speciesList.Count; i++)
                 {
                     counter += speciesList[i].GetComponent<Fish>().food;
 
@@ -358,7 +356,7 @@ public class Simulation : MonoBehaviour {
                 randomSeed = Random.Range(0, GetTotalFitness(speciesList, "shark"));
                 counter = 0;
 
-                for (int i = 0; i < populationSizeShark; i++)
+                for (int i = 0; i < speciesList.Count; i++)
                 {
                     counter += speciesList[i].GetComponent<Shark>().food;
 
