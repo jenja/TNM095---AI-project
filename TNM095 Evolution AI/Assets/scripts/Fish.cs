@@ -27,7 +27,7 @@ public class Fish : MonoBehaviour {
     // Use this for initialization
     void Start() {
 
-        this.food = 0;
+        food = 0;
 		turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
 		randomAngle = Random.Range (-turnAngle, turnAngle);
 
@@ -78,8 +78,8 @@ public class Fish : MonoBehaviour {
 		transform.Translate(forwardDirection * Time.deltaTime * speed);
 
 		//teleport fish to other side or stay in boundries: Choose ONLY ONE of following!
-		cUtils.KeepWithinBoundries(gameObject);
-		//cUtils.tpToOtherSide (gameObject);
+		//cUtils.KeepWithinBoundries(gameObject);
+	    cUtils.tpToOtherSide (gameObject);
 
 		//Check if food is in vision
 		detectFood ();
@@ -169,7 +169,7 @@ public class Fish : MonoBehaviour {
     //Check collision 
     void OnTriggerEnter2D(Collider2D coll){
         if(coll.gameObject.tag == "food") {
-            this.food = this.food + 1;
+            food += 1;
             Destroy(coll.gameObject);
 			GameObject.Find ("Simulation").GetComponent<Simulation> ().removeFood ();
         }

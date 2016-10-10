@@ -67,11 +67,11 @@ public class UI : MonoBehaviour {
 
 		string text = "";
 
-		text += "    Speed  Angle    Range   Size\n";
+		text += "    Speed  Angle    Range   Size   Food\n";
 
 		//Display individuals
 		foreach (List<float> fish in archive[genDisplayChoice]) {
-			
+
 			foreach (float stat in fish)
 				//text += stat.ToString("F") + ", ";
 				text += string.Format ("{0,10}", stat.ToString("F1"));

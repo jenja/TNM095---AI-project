@@ -93,8 +93,8 @@ public class Shark : MonoBehaviour {
         transform.Translate(forwardDirection * Time.deltaTime * speed);
 
 		//teleport fish to other side or stay in boundries: Choose ONLY ONE of following!
-		cUtils.KeepWithinBoundries(gameObject);
-		//cUtils.tpToOtherSide (gameObject);
+		//cUtils.KeepWithinBoundries(gameObject);
+		cUtils.tpToOtherSide (gameObject);
 
         //Check if food is in vision
         detectFood();

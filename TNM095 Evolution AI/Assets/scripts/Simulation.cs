@@ -88,10 +88,10 @@ public class Simulation : MonoBehaviour {
         {
 
             //TODO Replace numbers with variables
-            float newSpeed = Random.Range(0.01f, 5.0f);
+            float newSpeed = Random.Range(minSpeed + 0.5f, maxSpeed + 0.5f);
             float newTurnAngle = Random.Range(0.01f, 180.0f);
             float newVisRange = Random.Range(0.1f, 10.0f);
-            float newSize = Random.Range(0.5f, 1.0f);
+            float newSize = Random.Range(minSize + 0.5f, maxSize + 0.5f);
 
 
             randomDnaListShark.Add(new float[] { newSpeed, newTurnAngle, newVisRange, newSize });
@@ -170,13 +170,14 @@ public class Simulation : MonoBehaviour {
 	private void ReproduceGeneration () {
 
         SortFishByFitness(fishList, "fish");
-        SpawnNextGen (GenerateChromosomes (fishList, "fish", populationSizeFish), fishList, "fish");
+        
 
         SortFishByFitness(sharkList, "shark");
         SpawnNextGen(GenerateChromosomes(sharkList, "shark", populationSizeShark), sharkList, "shark");
 
 		AddStatsToArchive ();
-		GameObject.Find ("UI Controller").GetComponent<UI> ().addGenerationToDropDown (generation);
+        SpawnNextGen(GenerateChromosomes(fishList, "fish", populationSizeFish), fishList, "fish");
+        GameObject.Find ("UI Controller").GetComponent<UI> ().addGenerationToDropDown (generation);
 
         generation++;
 	}
@@ -212,6 +213,8 @@ public class Simulation : MonoBehaviour {
 			foreach (float stat in fish.GetComponent<Fish>().chromosome) {
 				tempStats.Add (stat);
 			}
+            //Add amount of food eaten
+            tempStats.Add(fish.GetComponent<Fish>().food);
 			tempStatList.Add (tempStats);
 		}
 		archiveList.Add(tempStatList);
