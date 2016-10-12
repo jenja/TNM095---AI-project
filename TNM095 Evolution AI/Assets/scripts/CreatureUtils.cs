@@ -45,13 +45,15 @@ public class CreatureUtils : MonoBehaviour {
 		float newX = 0;
 		float newY = 0;
 
-		if(creature.transform.position.x > worldScript.xBoundry || 
-			creature.transform.position.x < -worldScript.xBoundry)
-			newX = -creature.transform.position.x;
+		if(creature.transform.position.x > worldScript.xBoundry)
+			newX = -worldScript.xBoundry;
+		else if(creature.transform.position.x < -worldScript.xBoundry)
+			newX = worldScript.xBoundry;
 
-		if(creature.transform.position.y > worldScript.yBoundry || 
-			transform.position.y < -worldScript.yBoundry)
-			newY = -transform.position.y;
+		if (creature.transform.position.y > worldScript.yBoundry)
+			newY = -worldScript.yBoundry; 
+		else if (creature.transform.position.y < -worldScript.yBoundry)
+			newY = worldScript.yBoundry;
 
 		if 		(newX != 0 && newY != 0)	creature.transform.position = new Vector2 (newX, newY);
 		else if (newX != 0 && newY == 0)	creature.transform.position = new Vector2 (newX, creature.transform.position.y);
