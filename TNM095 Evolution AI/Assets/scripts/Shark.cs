@@ -65,7 +65,7 @@ public class Shark : MonoBehaviour {
                 randomAngle = Random.Range(-turnAngle, turnAngle);
                 turnTimer = GameObject.Find("Simulation").GetComponent<Simulation>().idleTurnTime;
             }
-            forwardDirection = Quaternion.Euler (0, 0, randomAngle) * forwardDirection;
+            forwardDirection = Quaternion.Euler (0, 0, randomAngle * Time.deltaTime) * forwardDirection;
 			forwardDirection.Normalize ();
             turnTimer -= Time.deltaTime;
         }

@@ -74,8 +74,15 @@ public class Fish : MonoBehaviour {
 			turnTimer -= Time.deltaTime;
 		}
 
-		//Move individual forward with constant speed
-		transform.Translate(forwardDirection * Time.deltaTime * speed);
+        if (sharkInRange){
+            //Move individual forward with constant speed
+            transform.Translate(forwardDirection * Time.deltaTime * speed * 1.25f);
+        }
+        else {
+            //Move individual forward with constant speed
+            transform.Translate(forwardDirection * Time.deltaTime * speed * 0.75f);
+        }
+		
 
 		//teleport fish to other side or stay in boundries: Choose ONLY ONE of following!
 		//cUtils.KeepWithinBoundries(gameObject);
