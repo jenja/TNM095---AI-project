@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Simulation : MonoBehaviour {
 
@@ -88,10 +89,10 @@ public class Simulation : MonoBehaviour {
         {
 
             //TODO Replace numbers with variables
-            float newSpeed = Random.Range(minSpeed + 0.5f, maxSpeed + 0.5f);
+            float newSpeed = Random.Range(minSpeed, maxSpeed);
             float newTurnAngle = Random.Range(0.01f, 180.0f);
             float newVisRange = Random.Range(0.1f, 10.0f);
-            float newSize = Random.Range(minSize - 0.5f, maxSize - 0.5f);
+            float newSize = Random.Range(minSize, maxSize - 0.5f);
 
 
             randomDnaListShark.Add(new float[] { newSpeed, newTurnAngle, newVisRange, newSize });
@@ -180,6 +181,7 @@ public class Simulation : MonoBehaviour {
         GameObject.Find ("UI Controller").GetComponent<UI> ().addGenerationToDropDown (generation);
 
         generation++;
+		GameObject.Find ("UiGenText").GetComponent<Text> ().text = "Gen " + generation;
 	}
 
 	private void SortFishByFitness(List<GameObject> speciesList, string species) {
